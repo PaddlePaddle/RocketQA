@@ -1,0 +1,6 @@
+jtype: RocketQADualEncoder
+metas:
+  py_modules:
+    - executor.py
+with:
+  model: v1_marco_de
