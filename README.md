@@ -54,19 +54,11 @@ docker run -it docker.io/rocketqa/rocketqa bash
 ## API
 The RocketQA development tool supports two types of models, ERNIE-based dual encoder for answer retrieval and ERNIE-based cross encoder for answer re-ranking. And the development tool provides the following methods:
 
-<<<<<<< HEAD
 #### [`rocketqa.available_models()`](https://github.com/PaddlePaddle/RocketQA/blob/3a99cf2720486df8cc54acc0e9ce4cbcee993413/rocketqa/rocketqa.py#L17)
 
 Returns the names of the available RocketQA models. 
 
 #### [`rocketqa.load_model(model, use_cuda=False, device_id=0, batch_size=1)`](https://github.com/PaddlePaddle/RocketQA/blob/3a99cf2720486df8cc54acc0e9ce4cbcee993413/rocketqa/rocketqa.py#L52)
-=======
-#### [`rocketqa.available_models()`](https://github.com/sfwydyc/rocketqa/blob/faef4c83a82a424fae79c12e173ae048f78e4f10/rocketqa/rocketqa.py#L17)
-
-Returns the names of the available RocketQA models. 
-
-#### `rocketqa.load_model(model, use_cuda=False, device_id=0, batch_size=1)`
->>>>>>> 3a99cf2720486df8cc54acc0e9ce4cbcee993413
 
 Returns the model specified by the input parameter. Both dual encoder and cross encoder can be initialized by this method. With input parameter, developers can load RocketQA models returned by "available_models()" or their own checkpoints.
 
@@ -74,7 +66,6 @@ Returns the model specified by the input parameter. Both dual encoder and cross 
 
 Dual-encoder returned by "load_model()" supports the following methods:
 
-<<<<<<< HEAD
 #### [`model.encode_query(query: List[str])`](https://github.com/PaddlePaddle/RocketQA/blob/3a99cf2720486df8cc54acc0e9ce4cbcee993413/rocketqa/predict/dual_encoder.py#L126)
 
 Given a list of queries, returns their representation vectors encoded by model.
@@ -84,17 +75,6 @@ Given a list of queries, returns their representation vectors encoded by model.
 Given a list of passages and their corresponding titles (optional), returns their representations vectors encoded by model.
 
 #### [`model.matching(query: List[str], para: List[str], title: List[str])`](https://github.com/PaddlePaddle/RocketQA/blob/3a99cf2720486df8cc54acc0e9ce4cbcee993413/rocketqa/predict/dual_encoder.py#L187)
-=======
-#### `model.encode_query(query: List[str])`
-
-Given a list of queries, returns their representation vectors encoded by model.
-
-#### `model.encode_para(para: List[str], title: List[str])`
-
-Given a list of passages and their corresponding titles (optional), returns their representations vectors encoded by model.
-
-#### `model.matching(query: List[str], para: List[str], title: List[str])`
->>>>>>> 3a99cf2720486df8cc54acc0e9ce4cbcee993413
 
 Given a list of queries and passages (and titles), returns their matching scores (dot product between two representation vectors). 
 
@@ -102,11 +82,7 @@ Given a list of queries and passages (and titles), returns their matching scores
 
 Cross-encoder returned by "load_model()" supports the following method:
 
-<<<<<<< HEAD
 #### [`model.matching(query: List[str], para: List[str], title: List[str])`](https://github.com/PaddlePaddle/RocketQA/blob/3a99cf2720486df8cc54acc0e9ce4cbcee993413/rocketqa/predict/cross_encoder.py#L129)
-=======
-#### `model.matching(query: List[str], para: List[str], title: List[str])`
->>>>>>> 3a99cf2720486df8cc54acc0e9ce4cbcee993413
 
 Given a list of queries and passages (and titles), returns their matching scores (probability that the paragraph is the query's right answer).
   
@@ -189,11 +165,8 @@ python3 app.py index
 
 # Search
 python3 app.py query
-<<<<<<< HEAD
 
 To know more, please visit [JINA example](https://github.com/PaddlePaddle/RocketQA/tree/main/examples/jina_example)
-=======
->>>>>>> 3a99cf2720486df8cc54acc0e9ce4cbcee993413
 ```
 
 
