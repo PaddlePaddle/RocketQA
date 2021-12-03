@@ -1,9 +1,9 @@
-# RocketQA End-to-End QA-system Development Tool
+# RocketQA
 
-This repository provides a simple and efficient toolkit for running RocketQA models and build a Question Answering (QA) system. 
+In recent years, the dense retrivers based on pre-trained language models have achieved remarkable progress. To facilitate more developers to easily use cutting edge technologies, this repository provides an easy-to-use toolkit for running and fine-tuning the state-of-the-art dense retrievers, namely **RocketQA**. The toolkit provides multiple models for both English and Chinese (trained on [DuReader](https://github.com/baidu/DuReader)), and will continue to update the latest models. By integrating with [JINA](https://jina.ai/), this repository also provides an example to build an end-to-end question answering system based on **RocketQA**. 
 
 ## RocketQA
-**RocketQA** is a series of dense retrieval models for Open-Domain QA. 
+**RocketQA** is a series of dense retrieval models for knowledge intensive tasks, including question answering, web search, dialogue, etc. 
 
 Open-Domain QA aims to find the answers of natural language questions from a large collection of documents. Common approaches often contain two stages, firstly a dense retriever selects a few relevant contexts, and then a neural reader extracts the answer.
 
