@@ -28,12 +28,12 @@ class RocketQADualEncoder(Executor):
                 .batch(batch_size=self.b_s))
         for batch in batch_generator:
             titles, paras = batch.get_attributes('tags__title', 'tags__para')
-            para_embs = self.encoder.encode_passage(para=paras, title=titles)
+            para_embs = self.encoder.encode_para(para=paras, title=titles)
             for doc, emb in zip(batch, para_embs):
                 doc.embedding = emb.squeeze()
 
     @requests(on='/search')
     def encode_question(self, docs, **kwargs):
         for doc in docs:
-            query_emb = self.encoder.encode_question(query=[doc.text])
+            query_emb = self.encoder.encode_query(query=[doc.text])
             doc.embedding = query_emb.squeeze()
