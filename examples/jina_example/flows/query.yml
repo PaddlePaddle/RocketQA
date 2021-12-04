@@ -24,8 +24,8 @@ executors:
     py_module:
         - rocketqa_reranker/executor.py
     uses_with:
-        model: v1_marco_de
+        model: v1_marco_ce
         use_cuda: $JINA_USE_CUDA
-        device_id: 1
+        device_id: 0
         batch_size: 32
     timeout_ready: '-1'

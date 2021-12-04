@@ -7,7 +7,7 @@ import rocketqa
 def build_index(encoder_conf, index_file_name, title_list, para_list):
 
     dual_encoder = rocketqa.load_model(**encoder_conf)
-    para_embs = dual_encoder.encode_passage(para=para_list, title=title_list)
+    para_embs = dual_encoder.encode_para(para=para_list, title=title_list)
 
     indexer = faiss.IndexFlatIP(768)
     indexer.add(para_embs.astype('float32'))

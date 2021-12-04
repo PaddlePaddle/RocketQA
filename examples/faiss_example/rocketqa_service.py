@@ -69,7 +69,7 @@ class RocketQAServer(web.RequestHandler):
             topk = input_data['topk']
 
         # encode query
-        q_embs = self._dual_encoder.encode_question(query=[query])
+        q_embs = self._dual_encoder.encode_query(query=[query])
 
         # search with faiss
         search_result = self._faiss_tool.search(q_embs, topk)

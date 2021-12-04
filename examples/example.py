@@ -17,10 +17,10 @@ for line in open(marco_tp_file):
 
 dual_encoder = rocketqa.load_model(model="v1_marco_de", use_cuda=True, device_id=0, batch_size=32)
 
-q_embs = dual_encoder.encode_question(query=query_list)
+q_embs = dual_encoder.encode_query(query=query_list)
 for q in q_embs:
     print (' '.join(str(ii) for ii in q))
-p_embs = dual_encoder.encode_passage(para=para_list, title=title_list)
+p_embs = dual_encoder.encode_para(para=para_list, title=title_list)
 for p in p_embs:
     print (' '.join(str(ii) for ii in p))
 ips = dual_encoder.matching(query=query_list, \

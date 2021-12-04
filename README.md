@@ -1,12 +1,11 @@
 # RocketQA
 
-In recent years, the dense retrievers based on pre-trained language models have achieved remarkable progress. To facilitate more developers to easily use cutting edge technologies, this repository provides an easy-to-use toolkit for running and fine-tuning the state-of-the-art dense retrievers, namely **RocketQA**. This toolkit has the following advantages:
+In recent years, the dense retrievers based on pre-trained language models have achieved remarkable progress. To facilitate more developers using cutting edge technologies, this repository provides an easy-to-use toolkit for running and fine-tuning the state-of-the-art dense retrievers, namely **RocketQA**. This toolkit has the following advantages:
 
 
-* ***State-of-the-art***: It provides well-trained RocketQA models, which achieve SOTA performance on many dense retrieval datasets. And it will continue to update the latest models.
-* ***First-Chinese-model***: This toolkit provides the first open source Chinese dense retrieval model, which is trained on millions of manual annotation data from [DuReader dataset](https://github.com/baidu/DuReader).
-* ***Easy-to-use***: By integrating this toolkit with [JINA](https://jina.ai/) or FAISS, developers can build an end-to-end question answering system with several lines of code.
-
+* ***State-of-the-art***: It provides well-trained RocketQA models, which achieve SOTA performance on many dense retrieval datasets. And it will continue to update the [latest models](https://github.com/PaddlePaddle/RocketQA#news).
+* ***First-Chinese-model***: It provides the first open source Chinese dense retrieval model, which is trained on millions of manual annotation data from [DuReader](https://github.com/baidu/DuReader).
+* ***Easy-to-use***: By integrating this toolkit with [JINA](https://jina.ai/), developers can build an end-to-end question answering system with several lines of code.
 
 ## Installation
 
@@ -28,7 +27,7 @@ Second, install rocketqa package:
 $ pip install rocketqa
 ```
 
-NOTE: this toolkit MUST be running on Python3.6+ with [PaddlePaddle](https://www.paddlepaddle.org.cn/install/quick?docurl=/documentation/docs/zh/install/pip/linux-pip.html) 2.0+ :
+NOTE: this toolkit MUST be running on Python3.6+ with [PaddlePaddle](https://www.paddlepaddle.org.cn/install/quick?docurl=/documentation/docs/zh/install/pip/linux-pip.html) 2.0+.
 
 ### Install with Docker
 
@@ -55,10 +54,10 @@ python3 app.py index toy_data/test.tsv
 # Query
 python3 app.py query_cli
 ```
-Please view [JINA example](https://github.com/PaddlePaddle/RocketQA/tree/main/examples/jina_example) to see our example.
+Please view [JINA example](https://github.com/PaddlePaddle/RocketQA/tree/main/examples/jina_example) to know more.
 
-### Running with Faiss
-We also provide a simple example built on [Faiss](https://github.com/facebookresearch/faiss)
+### Running with FAISS
+We also provide a simple example built on [Faiss](https://github.com/facebookresearch/faiss).
 ```bash
 cd examples/faiss_example/
 pip3 install -r requirements.txt
@@ -75,7 +74,7 @@ python3 query.py
 
 
 ## API
-RocketQA and our toolkit provide two types of models, ERNIE-based dual encoder for answer retrieval and ERNIE-based cross encoder for answer re-ranking. For running RocketQA models and your own checkpoints, you can use the following functions.
+RocketQA provide two types of models, ERNIE-based dual encoder for answer retrieval and ERNIE-based cross encoder for answer re-ranking. For running RocketQA models and your own checkpoints, you can use the following functions.
 
 ### Load model
 
@@ -171,25 +170,45 @@ ${YOUR_CONFIG} is a JSON format file.
     "joint_training": 0
 }
 ```
+
+## News
+* August 26, 2021: [RocketQA v2](https://arxiv.org/pdf/2110.07367.pdf) was accepted by EMNLP 2021.
+* May 5, 2021: [PAIR](https://aclanthology.org/2021.findings-acl.191.pdf) was accepted by ACL 2021
+* March 11, 2021: [RocketQA v1](https://arxiv.org/pdf/2010.08191.pdf) was accepted by NAACL 2021.
   
 ## Citing & Authors
 
-If you find RocketQA v1 models (v1*) helpful, feel free to cite our publication [RocketQA: An Optimized Training Approach to Dense Passage Retrieval for Open-Domain Question Answering](https://arxiv.org/pdf/2010.08191.pdf)
+If you find RocketQA v1 models helpful, feel free to cite our publication [RocketQA: An Optimized Training Approach to Dense Passage Retrieval for Open-Domain Question Answering](https://arxiv.org/pdf/2010.08191.pdf)
 ```
-@inproceedings{unilmv2,
+@inproceedings{rocketqa_v1,
     title="RocketQA: An Optimized Training Approach to Dense Passage Retrieval for Open-Domain Question Answering",
-    author="",
+    author="Yingqi Qu, Yuchen Ding, Jing Liu, Kai Liu, Ruiyang Ren, Wayne Xin Zhao, Daxiang Dong, Hua Wu and Haifeng Wang",
     year="2020",
     booktitle = "Preprint"
 }
 ```
 
-If you find PAIR models (pair*) helpful, feel free to cite our publication [PAIR: Leveraging Passage-Centric Similarity Relation for Improving Dense Passage Retrieval](https://aclanthology.org/2021.findings-acl.191.pdf)
+If you find PAIR models helpful, feel free to cite our publication [PAIR: Leveraging Passage-Centric Similarity Relation for Improving Dense Passage Retrieval](https://aclanthology.org/2021.findings-acl.191.pdf)
+```
+@inproceedings{rocketqa_pair,
+    title="PAIR: Leveraging Passage-Centric Similarity Relation for Improving Dense Passage Retrieval",
+    author="Ruiyang Ren, Shangwen Lv, Yingqi Qu, Jing Liu, Wayne Xin Zhao, Qiaoqiao She, Hua Wu, Haifeng Wang and Ji-Rong Wen",
+    year="2021",
+    booktitle = "Preprint"
+}
+```
 
-If you find RocketQA v2  models (v2*) helpful, feel free to cite our publication [RocketQAv2: A Joint Training Method for Dense Passage Retrieval and Passage Re-ranking](https://arxiv.org/pdf/2110.07367.pdf)
+If you find RocketQA v2 models helpful, feel free to cite our publication [RocketQAv2: A Joint Training Method for Dense Passage Retrieval and Passage Re-ranking](https://arxiv.org/pdf/2110.07367.pdf)
 
-## News
+```
+@inproceedings{rocketqa_v2,
+    title="RocketQAv2: A Joint Training Method for Dense Passage Retrieval and Passage Re-ranking",
+    author="Ruiyang Ren, Yingqi Qu, Jing Liu, Wayne Xin Zhao, Qiaoqiao She, Hua Wu, Haifeng Wang and Ji-Rong Wen",
+    year="2021",
+    booktitle = "Preprint"
+}
+```
 
 
 ## License
-PaddlePaddle is provided under the [Apache-2.0 license](https://github.com/PaddlePaddle/RocketQA/blob/main/LICENSE).
+This repository is provided under the [Apache-2.0 license](https://github.com/PaddlePaddle/RocketQA/blob/main/LICENSE).
