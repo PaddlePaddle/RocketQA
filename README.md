@@ -176,15 +176,15 @@ ${YOUR_CONFIG} is a JSON format file.
 * May 5, 2021: [PAIR](https://aclanthology.org/2021.findings-acl.191.pdf) was accepted by ACL 2021
 * March 11, 2021: [RocketQA v1](https://arxiv.org/pdf/2010.08191.pdf) was accepted by NAACL 2021.
   
-## Citing & Authors
+## Citations
 
 If you find RocketQA v1 models helpful, feel free to cite our publication [RocketQA: An Optimized Training Approach to Dense Passage Retrieval for Open-Domain Question Answering](https://arxiv.org/pdf/2010.08191.pdf)
 ```
 @inproceedings{rocketqa_v1,
     title="RocketQA: An Optimized Training Approach to Dense Passage Retrieval for Open-Domain Question Answering",
     author="Yingqi Qu, Yuchen Ding, Jing Liu, Kai Liu, Ruiyang Ren, Wayne Xin Zhao, Daxiang Dong, Hua Wu and Haifeng Wang",
-    year="2020",
-    booktitle = "Preprint"
+    year="2021",
+    booktitle = "In Proceedings of NAACL"
 }
 ```
 
@@ -194,7 +194,7 @@ If you find PAIR models helpful, feel free to cite our publication [PAIR: Levera
     title="PAIR: Leveraging Passage-Centric Similarity Relation for Improving Dense Passage Retrieval",
     author="Ruiyang Ren, Shangwen Lv, Yingqi Qu, Jing Liu, Wayne Xin Zhao, Qiaoqiao She, Hua Wu, Haifeng Wang and Ji-Rong Wen",
     year="2021",
-    booktitle = "Preprint"
+    booktitle = "In Proceedings of ACL Findings"
 }
 ```
 
@@ -205,7 +205,7 @@ If you find RocketQA v2 models helpful, feel free to cite our publication [Rocke
     title="RocketQAv2: A Joint Training Method for Dense Passage Retrieval and Passage Re-ranking",
     author="Ruiyang Ren, Yingqi Qu, Jing Liu, Wayne Xin Zhao, Qiaoqiao She, Hua Wu, Haifeng Wang and Ji-Rong Wen",
     year="2021",
-    booktitle = "Preprint"
+    booktitle = "In Proceedings of EMNLP"
 }
 ```
 
