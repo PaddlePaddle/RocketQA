@@ -37,21 +37,21 @@ docker pull rocketqa/rocketqa
 docker run -it docker.io/rocketqa/rocketqa bash
 ```
 
-## Start your Question Answer (QA) System
+## Getting Started
 
-Refer to the examples below, you can build your own QA-System with several lines of code.
+Refer to the examples below, you can build your own Search Engine with several lines of code.
 
 ### Running with JINA
-[JINA](https://jina.ai/) is a cloud-native neural search framework to build SOTA and scalable deep learning search applications in minutes. Here is a simple example to build a QA-system based on JINA and RocketQA.
+[JINA](https://jina.ai/) is a cloud-native neural search framework to build SOTA and scalable deep learning search applications in minutes. Here is a simple example to build a Search Engine based on JINA and RocketQA.
 
 ```bash
 cd examples/jina_example
 pip3 install -r requirements.txt
 
-# Index
+# Index: Encodes and indexes text, then starts a searching service
 python3 app.py index toy_data/test.tsv
 
-# Query
+# Query: Encodes query and searches for answer, returns candidates ranked by relevance score
 python3 app.py query_cli
 ```
 Please view [JINA example](https://github.com/PaddlePaddle/RocketQA/tree/main/examples/jina_example) to know more.
@@ -62,13 +62,13 @@ We also provide a simple example built on [Faiss](https://github.com/facebookres
 cd examples/faiss_example/
 pip3 install -r requirements.txt
 
-# Index
+# Index: Encodes and indexes text
 python3 index.py en ../marco.tp.1k marco_index
 
 # Start service
 python3 rocketqa_service.py en ../marco.tp.1k marco_index
 
-# request
+# Request: Encodes query and searches for answer, returns candidates ranked by relevance score
 python3 query.py
 ```
 
@@ -212,3 +212,13 @@ If you find RocketQA v2 models helpful, feel free to cite our publication [Rocke
 
 ## License
 This repository is provided under the [Apache-2.0 license](https://github.com/PaddlePaddle/RocketQA/blob/main/LICENSE).
+
+
+## Contact Information
+For help or issues using RocketQA, please submit a Github issue.
+
+
+For other communication or cooperation, please contact Jing Liu (liujing46@baidu.com) or scan the following QR Code.
+
+<img src="https://github.com/PaddlePaddle/RocketQA/blob/main/BaiduNLP-QRCode.png" width = "300" height = "300" alt="" align=center />
+
