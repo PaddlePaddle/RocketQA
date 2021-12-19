@@ -126,7 +126,7 @@ The table below shows the results of our experiments on two datasets.
 <th>MRR@10</th><th>R@50</th><th>R@1000</th><th>R@5</th><th>R@20</th><th>R@100</th>
 </tr>
 <tr>
-<td>RocketQAv2 (retriever)</td><td>37.9</td><td>86.4</td><td>98.2</td><td>74.9</td><td>83.5</td><td>89.1</td>
+<td>RocketQAv2 (retriever)</td><td>38.8</td><td>86.2</td><td>98.1</td><td>75.1</td><td>83.7</td><td>89.0</td>
 </tr>
 </table>
 
