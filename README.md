@@ -101,7 +101,7 @@ Given a list of paragraphs and their corresponding titles (optional), returns th
 
 Given a list of queries and paragraphs (and titles), returns their matching scores (dot product between two representation vectors). 
 
-### Croess encoder
+### Cross encoder
 Cross-encoder returned by "load_model()" supports the following function:
 
 #### [`model.matching(query: List[str], para: List[str], title: List[str])`](https://github.com/PaddlePaddle/RocketQA/blob/3a99cf2720486df8cc54acc0e9ce4cbcee993413/rocketqa/predict/cross_encoder.py#L129)
