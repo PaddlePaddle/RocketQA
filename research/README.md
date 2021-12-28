@@ -1,6 +1,6 @@
 ## RocketQA
 
-**Open source codes for the RocketQA series of research.**
+**This folder contains the codes and models for our RocketQA research papers.**
 
 `Update` **RocketQA v2** (August, 2021):  [''RocketQAv2: A Joint Training Method for Dense Passage Retrieval and Passage Re-ranking''](https://aclanthology.org/2021.emnlp-main.224.pdf) was accepted by EMNLP 2021. Code: [`RocketQAv2_EMNLP2021/`](RocketQAv2_EMNLP2021/)
 
