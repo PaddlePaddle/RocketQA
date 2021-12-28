@@ -46,7 +46,7 @@ docker run -it docker.io/rocketqa/rocketqa bash
 
 ## Getting Started
 
-Refer to the examples below, you can build and run your own Search Engine with several lines of code. We also provide a [Playground]() with JupyterNotebook. Try 🚀RocketQA straight away in your browser!
+Refer to the examples below, you can build and run your own Search Engine with several lines of code. We also provide a [Playground](https://aistudio.baidu.com/aistudio/projectdetail/3225255?contributionType=1) with JupyterNotebook. Try 🚀RocketQA straight away in your browser!
 
 ### Running with JINA
 [JINA](https://jina.ai/) is a cloud-native neural search framework to build SOTA and scalable deep learning search applications in minutes. Here is a simple example to build a Search Engine based on JINA and RocketQA.
