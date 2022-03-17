@@ -1,8 +1,8 @@
 import sys
 
-total_part = 8
 shift = int(sys.argv[1])
 top = int(sys.argv[2])
+total_part = int(sys.argv[3])
 
 f_list = []
 for part in range(total_part):

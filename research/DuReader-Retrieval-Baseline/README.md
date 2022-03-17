@@ -111,21 +111,21 @@ Where `TEST_SET` is the top-50 retrieved passages for each query from step 1, `M
 We provide a script to convert the model output to the standard json format for evaluation. To preform the conversion:
 
 ```
-MODEL_OUTPUT="output/dureader-retrieval-baseline-dataset/dev.retrieval_top50_res.tsv.score.0.0"
+MODEL_OUTPUT="output/dureader-retrieval-baseline-dataset/auxiliary/dev.retrieval_top50_res.tsv.score.0.0"
 ID_MAP="dureader-retrieval-baseline-dataset/auxiliary/dev.retrieval.top50.res.id_map.tsv"
 python metric/convert_rerank_res_to_json.py $MODEL_OUTPUT $ID_MAP 
 ```
 Where `MODEL_OUTPUT` represents the output file from the cross-encoder, `ID_MAP` is the mapping file which maps the query and passages to their original IDs. The output json file will be saved in `output/cross_res.json`.
 
 ## Evaluation
-`MRR@10`, `Recall@1` and `Recall@50` are used as evaluation metrics. Here we provide a script `evaluate.py` for evaluation.
+`MRR@10`, `Recall@1` and `Recall@50` are used as evaluation metrics. Here we provide a script `evaluation.py` for evaluation.
 
 To evluate, run
 
 ```
 REFERENCE_FIEL="dureader-retrieval-baseline-dataset/dev/dev.json"
 PREDICTION_FILE="output/cross_res.json"
-python metric/evaluate.py $REFERENCE_FIEL $PREDICTION_FILE
+python metric/evaluation.py $REFERENCE_FIEL $PREDICTION_FILE
 ```
 Where `REFERENCE_FIEL` is the origianl dataset file, and `PREDICTION_FILE ` is the model prediction that should be a valid JSON file of `(qid, [list-of -top50-pid])` pairs, for example:
 
@@ -163,7 +163,7 @@ The performance of our baseline model on the development set are shown below:
 
 | Model |  MRR@10 | recall@1 | recall@50 |
 | --- | --- | --- | --- |
-| dual-encoder (retrieval) | 60.32 | 49.75 | 91.70|
+| dual-encoder (retrieval) | 60.45 | 49.75 | 91.75|
 | cross-encoder (re-ranking) | 72.84 | 64.10 | 91.75|
 
 # Copyright and License

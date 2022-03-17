@@ -26,5 +26,5 @@ done
 wait
 
 para_part_cnt=`cat $DATA_PATH/part-00 | wc -l`
-python src/merge.py $para_part_cnt $TOP_K >> output/test.log
+python src/merge.py $para_part_cnt $TOP_K 4 >> output/test.log
 rm -rf output/res.top${TOP_K}-part*
