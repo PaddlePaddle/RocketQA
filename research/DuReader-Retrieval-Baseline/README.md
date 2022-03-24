@@ -1,7 +1,7 @@
 # DuReader<sub>retrieval</sub> Dataset
 **Passage retrieval** requires systems to find relevant passages from a large passage collection, which is an important task in the fields of natural language processing and information retrieval. The traditional retrieval systems use term-based sparse representations (e.g. BM25) to match the query and the candidate passages. But such methods cannot handle term mismatch, i.e. semantically relevant but with few overlapped terms. Recent studies have shown that dense retrieval based on pre-trained language models can effectively deal with such problem via semantic dense representations of query and passages. The method has better performance in many applications, like question answering. 
 
-To promote the research in dense retrieval, we present **DuReader<sub>retrieval</sub>**, a large-scale Chinese dataset for passage retrieval. The dataset contains over **\*90K\*** questions and **\*8M\*** passages from real users, and covers many challenges in real-world applications. For more details about the dataset, please refer to this [paper  (comming soon)]().
+To promote the research in dense retrieval, we present **DuReader<sub>retrieval</sub>**, a large-scale Chinese dataset for passage retrieval. The dataset contains over **\*90K\*** questions and **\*8M\*** passages from real users, and covers many challenges in real-world applications. For more details about the dataset, please refer to this [paper](https://arxiv.org/abs/2203.10232).
 
 We provide two types of dataset:
 
@@ -111,7 +111,7 @@ Where `TEST_SET` is the top-50 retrieved passages for each query from step 1, `M
 We provide a script to convert the model output to the standard json format for evaluation. To preform the conversion:
 
 ```
-MODEL_OUTPUT="output/dureader-retrieval-baseline-dataset/auxiliary/dev.retrieval_top50_res.tsv.score.0.0"
+MODEL_OUTPUT="output/dureader-retrieval-baseline-dataset/auxiliary/dev.retrieval.top50.res.tsv.score.0.0"
 ID_MAP="dureader-retrieval-baseline-dataset/auxiliary/dev.retrieval.top50.res.id_map.tsv"
 python metric/convert_rerank_res_to_json.py $MODEL_OUTPUT $ID_MAP 
 ```
