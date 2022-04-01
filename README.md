@@ -13,6 +13,12 @@ In recent years, the dense retrievers based on pre-trained language models have 
 * ***First-Chinese-model***: 🚀RocketQA provides the first open source Chinese dense retrieval model, which is trained on millions of manual annotation data from [DuReader](https://github.com/baidu/DuReader).
 * ***Easy-to-use***: By integrating this toolkit with [JINA](https://jina.ai/), 🚀RocketQA can help developers build an end-to-end question answering system with several lines of code. <img src="https://github.com/PaddlePaddle/RocketQA/blob/main/RocketQA_flow.png" alt="" align=center />  
 
+## News
+* March 30, 2022: we released the world’s first high-quality Chinese information retrieval dataset for real application scenarios of search engines: **DuReader<sub>retrieval</sub>**. [paper](https://arxiv.org/abs/2203.10232) [download](https://github.com/baidu/DuReader/tree/master/DuReader-Retrieval)
+* August 26, 2021: [RocketQA v2](https://arxiv.org/pdf/2110.07367.pdf) was accepted by EMNLP 2021.
+* May 5, 2021: [PAIR](https://aclanthology.org/2021.findings-acl.191.pdf) was accepted by ACL 2021
+* March 11, 2021: [RocketQA v1](https://arxiv.org/pdf/2010.08191.pdf) was accepted by NAACL 2021.
+
 
 ## Installation
 
@@ -141,10 +147,6 @@ p_embs = dual_encoder.encode_para(para=para_list)
 dot_products = dual_encoder.matching(query=query_list, para=para_list)
 ```
 
-## News
-* August 26, 2021: [RocketQA v2](https://arxiv.org/pdf/2110.07367.pdf) was accepted by EMNLP 2021.
-* May 5, 2021: [PAIR](https://aclanthology.org/2021.findings-acl.191.pdf) was accepted by ACL 2021
-* March 11, 2021: [RocketQA v1](https://arxiv.org/pdf/2010.08191.pdf) was accepted by NAACL 2021.
   
 ## Citations
 
