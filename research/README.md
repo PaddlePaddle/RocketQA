@@ -2,7 +2,9 @@
 
 **This folder contains the codes and models for our RocketQA research papers.**
 
-`Update` **RocketQA v2** (August, 2021):  [''RocketQAv2: A Joint Training Method for Dense Passage Retrieval and Passage Re-ranking''](https://aclanthology.org/2021.emnlp-main.224.pdf) was accepted by EMNLP 2021. Code: [`RocketQAv2_EMNLP2021/`](RocketQAv2_EMNLP2021/)
+`Update` **DuReader<sub>retrieval</sub>** (March, 2021):  [''DuReader_retrieval: A Large-scale Chinese Benchmark for Passage Retrieval from Web Search Engine''](https://arxiv.org/pdf/2203.10232.pdf) was published. The baseline code: [`DuReader-Retrieval-Baseline/`](DuReader-Retrieval-Baseline/)
+
+**RocketQA v2** (August, 2021):  [''RocketQAv2: A Joint Training Method for Dense Passage Retrieval and Passage Re-ranking''](https://aclanthology.org/2021.emnlp-main.224.pdf) was accepted by EMNLP 2021. Code: [`RocketQAv2_EMNLP2021/`](RocketQAv2_EMNLP2021/)
 
 **PAIR** (May, 2021):  [''PAIR: Leveraging Passage-Centric Similarity Relation for Improving Dense Passage Retrieval''](https://aclanthology.org/2021.findings-acl.191.pdf) was accepted by ACL 2021 Findings. Code: [`PAIR_ACL2021/`](PAIR_ACL2021/)
 
@@ -44,7 +46,7 @@ If you find RocketQA v2 models helpful, feel free to cite the following publicat
 }
 ```
 
-If you find DuReader<sub>retrieval</sub> dataset helpful, feel free to cite our publication [DuReader_retrieval: A Large-scale Chinese Benchmark for Passage Retrieval from Web Search Engine](https://arxiv.org/pdf/2203.10232.pdf)
+If you find DuReader<sub>retrieval</sub> dataset helpful, feel free to cite the following publication:
 
 ```
 @inproceedings{DuReader_retrieval,
