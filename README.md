@@ -15,7 +15,7 @@ In recent years, the dense retrievers based on pre-trained language models have 
 
 ## News
 * March 30, 2022: the baseline of [Lic2022 Passage Retrieval task](https://aistudio.baidu.com/aistudio/competition/detail/157/0/introduction) was published.
-* March 30, 2022: we released the world’s first high-quality Chinese information retrieval dataset for real application scenarios of search engines: **DuReader<sub>retrieval</sub>**. [[paper]](https://arxiv.org/abs/2203.10232) [[download]](https://github.com/baidu/DuReader/tree/master/DuReader-Retrieval)
+* March 30, 2022: we released the world’s first high-quality Chinese information retrieval dataset for real application scenarios of search engines: **DuReader<sub>retrieval</sub>**. [[Paper]](https://arxiv.org/abs/2203.10232) [[Download]](https://github.com/baidu/DuReader/tree/master/DuReader-Retrieval)
 * August 26, 2021: [RocketQA v2](https://arxiv.org/pdf/2110.07367.pdf) was accepted by EMNLP 2021.
 * May 5, 2021: [PAIR](https://aclanthology.org/2021.findings-acl.191.pdf) was accepted by ACL 2021
 * March 11, 2021: [RocketQA v1](https://arxiv.org/pdf/2010.08191.pdf) was accepted by NAACL 2021.
@@ -185,7 +185,7 @@ If you find RocketQA v2 models helpful, feel free to cite our publication [Rocke
 If you find DuReader<sub>retrieval</sub> dataset helpful, feel free to cite our publication [DuReader_retrieval: A Large-scale Chinese Benchmark for Passage Retrieval from Web Search Engine](https://arxiv.org/pdf/2203.10232.pdf)
 
 ```
-@inproceedings{DuReader<sub>retrieval</sub>,
+@inproceedings{DuReader_retrieval,
     title="DuReader_retrieval: A Large-scale Chinese Benchmark for Passage Retrieval from Web Search Engine",
     author="Yifu Qiu, Hongyu Li, Yingqi Qu, Ying Chen, Qiaoqiao She, Jing Liu, Hua Wu and Haifeng Wang",
     year="2022"
