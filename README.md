@@ -11,14 +11,15 @@ In recent years, the dense retrievers based on pre-trained language models have 
 
 * ***State-of-the-art***: 🚀RocketQA provides our well-trained models, which achieve SOTA performance on many dense retrieval datasets. And it will continue to update the [latest models](https://github.com/PaddlePaddle/RocketQA#news).
 * ***First-Chinese-model***: 🚀RocketQA provides the first open source Chinese dense retrieval model, which is trained on millions of manual annotation data from [DuReader](https://github.com/baidu/DuReader).
-* ***Easy-to-use***: By integrating this toolkit with [JINA](https://jina.ai/), 🚀RocketQA can help developers build an end-to-end question answering system with several lines of code. <img src="https://github.com/PaddlePaddle/RocketQA/blob/main/RocketQA_flow.png" alt="" align=center />  
+* ***Easy-to-use***: By integrating this toolkit with [JINA](https://jina.ai/), 🚀RocketQA can help developers build an end-to-end retrieval system and question answering system with several lines of code. <img src="https://github.com/PaddlePaddle/RocketQA/blob/main/RocketQA_flow.png" alt="" align=center />  
 
 ## News
-* March 30, 2022: The baseline of [Passage Retrieval Leaderboard](https://aistudio.baidu.com/aistudio/competition/detail/157/0/introduction) was published.
-* March 30, 2022: We released the world’s first high-quality Chinese information retrieval dataset for real application scenarios of search engines: **DuReader<sub>retrieval</sub>**. [[Paper]](https://arxiv.org/abs/2203.10232) [[Download]](https://github.com/baidu/DuReader/tree/master/DuReader-Retrieval)
-* August 26, 2021: [RocketQA v2](https://arxiv.org/pdf/2110.07367.pdf) was accepted by EMNLP 2021.
-* May 5, 2021: [PAIR](https://aclanthology.org/2021.findings-acl.191.pdf) was accepted by ACL 2021
-* March 11, 2021: [RocketQA v1](https://arxiv.org/pdf/2010.08191.pdf) was accepted by NAACL 2021.
+* March 30, 2022: The baseline of **DuReader<sub>retrieval</sub>** [leaderboard](https://aistudio.baidu.com/aistudio/competition/detail/157/0/introduction) was released. [[code/model]](https://github.com/PaddlePaddle/RocketQA/tree/main/research/DuReader-Retrieval-Baseline)
+* March 30, 2022: We released **DuReader<sub>retrieval</sub>**, a large-scale Chinese benchmark for passage retrieval. The dataset contains over 90K questions and 8M passages from Baidu Search. [[paper]](https://arxiv.org/abs/2203.10232) [[data]](https://github.com/baidu/DuReader/tree/master/DuReader-Retrieval)
+* December 3, 2021: The toolkit of dense retriever RocketQA was released, including the first chinese dense retrieval model trained on DuReader. 
+* August 26, 2021: [RocketQA v2](https://arxiv.org/pdf/2110.07367.pdf) was accepted by EMNLP 2021. [[code/model]](https://github.com/PaddlePaddle/RocketQA/tree/main/research/RocketQAv2_EMNLP2021)
+* May 5, 2021: [PAIR](https://aclanthology.org/2021.findings-acl.191.pdf) was accepted by ACL 2021. [[code/model]](https://github.com/PaddlePaddle/RocketQA/tree/main/research/PAIR_ACL2021)
+* March 11, 2021: [RocketQA v1](https://arxiv.org/pdf/2010.08191.pdf) was accepted by NAACL 2021. [[code/model]](https://github.com/PaddlePaddle/RocketQA/tree/main/research/RocketQA_NAACL2021)
 
 
 ## Installation
