@@ -2,7 +2,7 @@
 
 **This folder contains the codes and models for our RocketQA research papers.**
 
-`Update` **DuReader<sub>retrieval</sub>** (March, 2021):  [''DuReader_retrieval: A Large-scale Chinese Benchmark for Passage Retrieval from Web Search Engine''](https://arxiv.org/pdf/2203.10232.pdf) was published. The baseline code: [`DuReader-Retrieval-Baseline/`](DuReader-Retrieval-Baseline/)
+`Update` **DuReader<sub>retrieval</sub>** (March, 2022):  [''DuReader_retrieval: A Large-scale Chinese Benchmark for Passage Retrieval from Web Search Engine''](https://arxiv.org/pdf/2203.10232.pdf) was published. The baseline code: [`DuReader-Retrieval-Baseline/`](DuReader-Retrieval-Baseline/)
 
 **RocketQA v2** (August, 2021):  [''RocketQAv2: A Joint Training Method for Dense Passage Retrieval and Passage Re-ranking''](https://aclanthology.org/2021.emnlp-main.224.pdf) was accepted by EMNLP 2021. Code: [`RocketQAv2_EMNLP2021/`](RocketQAv2_EMNLP2021/)
 
