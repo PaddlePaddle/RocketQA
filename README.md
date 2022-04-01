@@ -182,6 +182,15 @@ If you find RocketQA v2 models helpful, feel free to cite our publication [Rocke
 }
 ```
 
+If you find DuReader<sub>retrieval</sub> dataset helpful, feel free to cite our publication [DuReader_retrieval: A Large-scale Chinese Benchmark for Passage Retrieval from Web Search Engine](https://arxiv.org/pdf/2203.10232.pdf)
+
+```
+@inproceedings{DuReader<sub>retrieval</sub>,
+    title="DuReader_retrieval: A Large-scale Chinese Benchmark for Passage Retrieval from Web Search Engine",
+    author="Yifu Qiu, Hongyu Li, Yingqi Qu, Ying Chen, Qiaoqiao She, Jing Liu, Hua Wu and Haifeng Wang",
+    year="2022"
+}
+```
 
 ## License
 This repository is provided under the [Apache-2.0 license](https://github.com/PaddlePaddle/RocketQA/blob/main/LICENSE).
