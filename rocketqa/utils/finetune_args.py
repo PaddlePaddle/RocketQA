@@ -53,8 +53,11 @@ train_g.add_arg("use_mix_precision",          bool,   False,   "Whether to use m
 train_g.add_arg("use_cross_batch",          bool,   False,   "Whether to use cross-batch for training.")
 train_g.add_arg("use_lamb",          bool,   False,   "Whether to use LambOptimizer for training.")
 train_g.add_arg("use_dynamic_loss_scaling",    bool,   True,   "Whether to use dynamic loss scaling.")
+train_g.add_arg("init_loss_scaling",           float,  102400,
+                "Loss scaling factor for mixed precision training, only valid when use_fp16 is enabled.")
 
 train_g.add_arg("test_save",            str,    "./checkpoints/test_result",       "test_save")
+train_g.add_arg("log_folder",            str,    "./log/",       "log_folder")
 train_g.add_arg("metric",               str,    "simple_accuracy",   "metric")
 train_g.add_arg("incr_every_n_steps",          int,    100,   "Increases loss scaling every n consecutive.")
 train_g.add_arg("decr_every_n_nan_or_inf",     int,    2,
@@ -67,7 +70,7 @@ train_g.add_arg("decr_ratio",                  float,  0.8,
 
 
 log_g = ArgumentGroup(parser,     "logging", "logging related.")
-log_g.add_arg("skip_steps",          int,    10,    "The steps interval to print loss.")
+log_g.add_arg("skip_steps",          int,    100,    "The steps interval to print loss.")
 log_g.add_arg("verbose",             bool,   False, "Whether to output verbose log.")
 
 data_g = ArgumentGroup(parser, "data", "Data paths, vocab paths and data processing options")
@@ -116,3 +119,4 @@ run_type_g.add_arg("use_multi_gpu_test",           bool,   False, "Whether to pe
 run_type_g.add_arg("metrics",                      bool,   True,  "Whether to perform evaluation on test data set.")
 run_type_g.add_arg("shuffle",                      bool,   True,  "")
 run_type_g.add_arg("for_cn",                       bool,   False,  "model train for cn or for other langs.")
+parser.add_argument("--enable_ce", action='store_true', help="The flag indicating whether to run the task for continuous evaluation.")

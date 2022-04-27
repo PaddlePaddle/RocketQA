@@ -34,8 +34,8 @@ log = logging.getLogger(__name__)
 
 def csv_reader(fd, delimiter='\t'):
     def gen():
-        for i in fd:
-            yield i.rstrip('\n').split(delimiter)
+        for i, line in enumerate(fd):
+            yield line.rstrip('\n').split(delimiter)
     return gen()
 
 
@@ -45,6 +45,7 @@ class BaseReader(object):
                  label_map_config=None,
                  q_max_seq_len=128,
                  p_max_seq_len=512,
+                 total_num=0,
                  do_lower_case=True,
                  in_tokens=False,
                  is_inference=False,
@@ -65,11 +66,9 @@ class BaseReader(object):
         self.for_cn = for_cn
         self.task_id = task_id
 
-        np.random.seed(random_seed)
-
         self.current_example = 0
         self.current_epoch = 0
-        self.num_examples = 0
+        self.total_num = total_num
 
         if label_map_config:
             with open(label_map_config, encoding='utf8') as f:
@@ -117,15 +116,24 @@ class BaseReader(object):
         tokens_query = tokenizer.tokenize(query)
         self._truncate_seq_pair([], tokens_query, q_max_seq_length - 2)
 
-        title = tokenization.convert_to_unicode(example.title)
-        tokens_title = tokenizer.tokenize(title)
+        # pos title
+        title_pos = tokenization.convert_to_unicode(example.title_pos)
+        tokens_title_pos = tokenizer.tokenize(title_pos)
+        # pos para
+        para_pos = tokenization.convert_to_unicode(example.para_pos)
+        tokens_para_pos = tokenizer.tokenize(para_pos)
 
-        para = tokenization.convert_to_unicode(example.para)
-        tokens_para = tokenizer.tokenize(para)
+        self._truncate_seq_pair(tokens_title_pos, tokens_para_pos, p_max_seq_length - 3)
 
-        self._truncate_seq_pair(tokens_title, tokens_para, p_max_seq_length - 3)
+        # neg title
+        title_neg = tokenization.convert_to_unicode(example.title_neg)
+        tokens_title_neg = tokenizer.tokenize(title_neg)
+        # neg para
+        para_neg = tokenization.convert_to_unicode(example.para_neg)
+        tokens_para_neg = tokenizer.tokenize(para_neg)
 
-        ### query
+        self._truncate_seq_pair(tokens_title_neg, tokens_para_neg, p_max_seq_length - 3)
+
         tokens_q = []
         text_type_ids_q = []
         tokens_q.append("[CLS]")
@@ -139,38 +147,62 @@ class BaseReader(object):
         token_ids_q = tokenizer.convert_tokens_to_ids(tokens_q)
         position_ids_q = list(range(len(token_ids_q)))
 
-        ### title-para
-        tokens_p = []
-        text_type_ids_p = []
-        tokens_p.append("[CLS]")
-        text_type_ids_p.append(0)
+        ### pos_para
+        tokens_p_pos = []
+        text_type_ids_p_pos = []
+        tokens_p_pos.append("[CLS]")
+        text_type_ids_p_pos.append(0)
 
-        for token in tokens_title:
-            tokens_p.append(token)
-            text_type_ids_p.append(0)
-        tokens_p.append("[SEP]")
-        text_type_ids_p.append(0)
+        for token in tokens_title_pos:
+            tokens_p_pos.append(token)
+            text_type_ids_p_pos.append(0)
+        tokens_p_pos.append("[SEP]")
+        text_type_ids_p_pos.append(0)
 
-        for token in tokens_para:
-            tokens_p.append(token)
-            text_type_ids_p.append(1)
-        tokens_p.append("[SEP]")
-        text_type_ids_p.append(1)
+        for token in tokens_para_pos:
+            tokens_p_pos.append(token)
+            text_type_ids_p_pos.append(1)
+        tokens_p_pos.append("[SEP]")
+        text_type_ids_p_pos.append(1)
 
-        token_ids_p = tokenizer.convert_tokens_to_ids(tokens_p)
-        position_ids_p = list(range(len(token_ids_p)))
+        token_ids_p_pos = tokenizer.convert_tokens_to_ids(tokens_p_pos)
+        position_ids_p_pos = list(range(len(token_ids_p_pos)))
+
+        ### neg_para
+        tokens_p_neg = []
+        text_type_ids_p_neg = []
+        tokens_p_neg.append("[CLS]")
+        text_type_ids_p_neg.append(0)
+
+        for token in tokens_title_neg:
+            tokens_p_neg.append(token)
+            text_type_ids_p_neg.append(0)
+        tokens_p_neg.append("[SEP]")
+        text_type_ids_p_neg.append(0)
+
+        for token in tokens_para_neg:
+            tokens_p_neg.append(token)
+            text_type_ids_p_neg.append(1)
+        tokens_p_neg.append("[SEP]")
+        text_type_ids_p_neg.append(1)
+        token_ids_p_neg = tokenizer.convert_tokens_to_ids(tokens_p_neg)
+        position_ids_p_neg = list(range(len(token_ids_p_neg)))
 
         if self.is_inference:
             Record = namedtuple('Record',
             ['token_ids_q', 'text_type_ids_q', 'position_ids_q', \
-             'token_ids_p', 'text_type_ids_p', 'position_ids_p'])
+             'token_ids_p_pos', 'text_type_ids_p_pos', 'position_ids_p_pos', \
+             'token_ids_p_neg', 'text_type_ids_p_neg', 'position_ids_p_neg'])
             record = Record(
                 token_ids_q=token_ids_q,
                 text_type_ids_q=text_type_ids_q,
                 position_ids_q=position_ids_q,
-                token_ids_p=token_ids_p,
-                text_type_ids_p=text_type_ids_p,
-                position_ids_p=position_ids_p)
+                token_ids_p_pos=token_ids_p_pos,
+                text_type_ids_p_pos=text_type_ids_p_pos,
+                position_ids_p_pos=position_ids_p_pos,
+                token_ids_p_neg=token_ids_p_neg,
+                text_type_ids_p_neg=text_type_ids_p_neg,
+                position_ids_p_neg=position_ids_p_neg)
         else:
             if self.label_map:
                 label_id = self.label_map[example.label]
@@ -179,7 +211,8 @@ class BaseReader(object):
 
             Record = namedtuple('Record',
                 ['token_ids_q', 'text_type_ids_q', 'position_ids_q', \
-                 'token_ids_p', 'text_type_ids_p', 'position_ids_p', \
+                 'token_ids_p_pos', 'text_type_ids_p_pos', 'position_ids_p_pos', \
+                 'token_ids_p_neg', 'text_type_ids_p_neg', 'position_ids_p_neg',
                  'label_id', 'qid'
                 ])
 
@@ -191,26 +224,26 @@ class BaseReader(object):
                 token_ids_q=token_ids_q,
                 text_type_ids_q=text_type_ids_q,
                 position_ids_q=position_ids_q,
-                token_ids_p=token_ids_p,
-                text_type_ids_p=text_type_ids_p,
-                position_ids_p=position_ids_p,
+                token_ids_p_pos=token_ids_p_pos,
+                text_type_ids_p_pos=text_type_ids_p_pos,
+                position_ids_p_pos=position_ids_p_pos,
+                token_ids_p_neg=token_ids_p_neg,
+                text_type_ids_p_neg=text_type_ids_p_neg,
+                position_ids_p_neg=position_ids_p_neg,
                 label_id=label_id,
                 qid=qid)
         return record
 
-    def _prepare_batch_data(self, examples, batch_size, phase=None, read_id=False):
+    def _prepare_batch_data(self, examples, batch_size, phase=None):
         """generate batch records"""
         batch_records, max_len = [], 0
         for index, example in enumerate(examples):
             if phase == "train":
                 self.current_example = index
-            if read_id is False:
-                record = self._convert_example_to_record(example, self.q_max_seq_len,
-                                                         self.p_max_seq_len, self.tokenizer)
-            else:
-                record = self._convert_example_id_to_record(example, self.q_max_seq_len,
-                                                         self.p_max_seq_len, self.tokenizer)
-            max_len = max(max_len, len(record.token_ids_p))
+            record = self._convert_example_to_record(example, self.q_max_seq_len,
+                                                     self.p_max_seq_len, self.tokenizer)
+            max_len = max(max_len, len(record.token_ids_p_pos))
+            max_len = max(max_len, len(record.token_ids_p_neg))
             if self.in_tokens:
                 to_append = (len(batch_records) + 1) * max_len <= batch_size
             else:
@@ -219,15 +252,14 @@ class BaseReader(object):
                 batch_records.append(record)
             else:
                 yield self._pad_batch_records(batch_records)
-                max_len = len(record.token_ids_p)
+                max_len = max(len(record.token_ids_p_neg), len(record.token_ids_p_pos))
                 batch_records = [record]
 
         if batch_records:
             yield self._pad_batch_records(batch_records)
 
     def get_num_examples(self, input_file):
-        examples = self._read_tsv(input_file)
-        return len(examples)
+        return len(self._read_tsv(input_file))
 
     def data_generator(self,
                        input_file,
@@ -235,9 +267,9 @@ class BaseReader(object):
                        epoch,
                        dev_count=1,
                        shuffle=True,
-                       phase=None,
-                       read_id=False):
-        examples = self._read_tsv(input_file, batch_size)
+                       phase=None):
+
+        examples = self._read_tsv(input_file, batch_size=batch_size)
 
         def wrapper():
             all_dev_batches = []
@@ -249,7 +281,7 @@ class BaseReader(object):
                     np.random.shuffle(examples)
 
                 for batch_data in self._prepare_batch_data(
-                        examples, batch_size, phase=phase, read_id=read_id):
+                        examples, batch_size, phase=phase):
                     if len(all_dev_batches) < dev_count:
                         all_dev_batches.append(batch_data)
                     if len(all_dev_batches) == dev_count:
@@ -266,64 +298,43 @@ class BaseReader(object):
         return f
 
 
-class DEPredictorReader(BaseReader):
-    def _read_samples(self, batch_samples, quotechar=None):
-        headers = 'query\ttitle\tpara\tlabel'.split('\t')
-        Example = namedtuple('Example', headers)
+class DETrainReader(BaseReader):
+    def _read_tsv(self, input_file, batch_size=16, quotechar=None):
+        """Reads a tab separated value file."""
+        with open(input_file, 'r', encoding='utf8') as f:
+            reader = csv_reader(f)
+            headers = 'query\ttitle_pos\tpara_pos\ttitle_neg\tpara_neg\tlabel'.split('\t')
+            text_indices = [
+                index for index, h in enumerate(headers) if h != "label"
+            ]
+            Example = namedtuple('Example', headers)
 
-        examples = []
-        for data in batch_samples:
-            line = []
-            sample = data.strip().split('\t')
-            for i in range(3):
-                if self.for_cn:
-                    line.append(sample[i].replace(' ', ''))
-                else:
-                    line.append(sample[i])
-            line.append('0')
-            example = Example(*line)
-            examples.append(example)
-        return examples
-
-
-    def data_generator(self,
-                       samples,
-                       batch_size=32,
-                       dev_count=1,
-                       shuffle=False,
-                       phase=None,
-                       read_id=False):
-        examples = self._read_samples(samples)
-
-        def wrapper():
-            all_dev_batches = []
-
-            for batch_data in self._prepare_batch_data(
-                    examples, batch_size, phase=phase, read_id=read_id):
-                if len(all_dev_batches) < dev_count:
-                    all_dev_batches.append(batch_data)
-                if len(all_dev_batches) == dev_count:
-                    for batch in all_dev_batches:
-                        yield batch
-                    all_dev_batches = []
-
-        def f():
-            try:
-                for i in wrapper():
-                    yield i
-            except Exception as e:
-                import traceback
-                traceback.print_exc()
-        return f
+            examples = []
+            for cnt, line in enumerate(reader):
+                for index, text in enumerate(line):
+                    if index in text_indices:
+                        if self.for_cn:
+                            line[index] = text.replace(' ', '')
+                        else:
+                            line[index] = text
+                example = Example(*line)
+                examples.append(example)
+            while len(examples) % batch_size != 0:
+                examples.append(example)
+            return examples
 
     def _pad_batch_records(self, batch_records):
         batch_token_ids_q = [record.token_ids_q for record in batch_records]
         batch_text_type_ids_q = [record.text_type_ids_q for record in batch_records]
         batch_position_ids_q = [record.position_ids_q for record in batch_records]
 
-        batch_token_ids_p = [record.token_ids_p for record in batch_records]
-        batch_text_type_ids_p = [record.text_type_ids_p for record in batch_records]
-        batch_position_ids_p = [record.position_ids_p for record in batch_records]
+        batch_token_ids_p_pos = [record.token_ids_p_pos for record in batch_records]
+        batch_text_type_ids_p_pos = [record.text_type_ids_p_pos for record in batch_records]
+        batch_position_ids_p_pos = [record.position_ids_p_pos for record in batch_records]
+
+        batch_token_ids_p_neg = [record.token_ids_p_neg for record in batch_records]
+        batch_text_type_ids_p_neg = [record.text_type_ids_p_neg for record in batch_records]
+        batch_position_ids_p_neg = [record.position_ids_p_neg for record in batch_records]
 
         if not self.is_inference:
             batch_labels = [record.label_id for record in batch_records]
@@ -346,22 +357,34 @@ class DEPredictorReader(BaseReader):
             batch_position_ids_q, pad_idx=self.pad_id)
         padded_task_ids_q = np.ones_like(padded_token_ids_q, dtype="int64") * self.task_id
 
-        padded_token_ids_p, input_mask_p = pad_batch_data(
-            batch_token_ids_p, pad_idx=self.pad_id, return_input_mask=True)
-        padded_text_type_ids_p = pad_batch_data(
-            batch_text_type_ids_p, pad_idx=self.pad_id)
-        padded_position_ids_p = pad_batch_data(
-            batch_position_ids_p, pad_idx=self.pad_id)
-        padded_task_ids_p = np.ones_like(padded_token_ids_p, dtype="int64") * self.task_id
+        padded_token_ids_p_pos, input_mask_p_pos = pad_batch_data(
+            batch_token_ids_p_pos, pad_idx=self.pad_id, return_input_mask=True)
+        padded_text_type_ids_p_pos = pad_batch_data(
+            batch_text_type_ids_p_pos, pad_idx=self.pad_id)
+        padded_position_ids_p_pos = pad_batch_data(
+            batch_position_ids_p_pos, pad_idx=self.pad_id)
+        padded_task_ids_p_pos = np.ones_like(padded_token_ids_p_pos, dtype="int64") * self.task_id
+
+        padded_token_ids_p_neg, input_mask_p_neg = pad_batch_data(
+                batch_token_ids_p_neg, pad_idx=self.pad_id, return_input_mask=True)
+        padded_text_type_ids_p_neg = pad_batch_data(
+                batch_text_type_ids_p_neg, pad_idx=self.pad_id)
+        padded_position_ids_p_neg = pad_batch_data(
+                batch_position_ids_p_neg, pad_idx=self.pad_id)
+        padded_task_ids_p_neg = np.ones_like(padded_token_ids_p_neg, dtype="int64") * self.task_id
 
         return_list = [
             padded_token_ids_q, padded_text_type_ids_q, padded_position_ids_q, padded_task_ids_q,
             input_mask_q,
-            padded_token_ids_p, padded_text_type_ids_p, padded_position_ids_p, padded_task_ids_p,
-            input_mask_p,
+            padded_token_ids_p_pos, padded_text_type_ids_p_pos, padded_position_ids_p_pos, padded_task_ids_p_pos,
+            input_mask_p_pos,
+            padded_token_ids_p_neg, padded_text_type_ids_p_neg, padded_position_ids_p_neg, padded_task_ids_p_neg,
+            input_mask_p_neg
         ]
         if not self.is_inference:
             return_list += [batch_labels, batch_qids]
 
         return return_list
 
+if __name__ == '__main__':
+    pass

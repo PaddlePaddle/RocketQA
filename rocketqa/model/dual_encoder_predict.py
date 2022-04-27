@@ -30,7 +30,7 @@ from rocketqa.model.ernie import ErnieModel
 
 log = logging.getLogger(__name__)
 
-def create_model(args,
+def create_predict_model(args,
                  pyreader_name,
                  ernie_config,
                  is_prediction=False,
