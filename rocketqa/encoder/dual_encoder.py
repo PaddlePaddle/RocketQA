@@ -245,7 +245,6 @@ class DualEncoder(object):
 
     def train(self, train_set, epoch, save_model_path, **kwargs):
         self._parse_train_args(train_set, epoch, save_model_path, kwargs)
-        print_arguments(self.args)
         check_cuda(self.args.use_cuda)
         log = logging.getLogger()
         dev_count = 1
@@ -254,6 +253,7 @@ class DualEncoder(object):
         if not os.path.exists(self.args.log_folder):
             os.makedirs(self.args.log_folder)
         prepare_logger(log, save_to_file=self.args.log_folder + '/log.train')
+        print_arguments(self.args, log)
 
         reader = reader_de_train.DETrainReader(
             vocab_path=self.args.vocab_path,
@@ -291,6 +291,7 @@ class DualEncoder(object):
         log.info("Num train examples: %d" % num_train_examples)
         log.info("Max train steps: %d" % max_train_steps)
         log.info("Num warmup steps: %d" % warmup_steps)
+        log.info("Learning rate: %f" % self.args.learning_rate)
 
         train_program = fluid.Program()
 

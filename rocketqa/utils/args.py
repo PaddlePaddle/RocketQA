@@ -65,11 +65,11 @@ class ArgumentGroup(object):
             **kwargs)
 
 
-def print_arguments(args):
-    log.info('-----------  Configuration Arguments -----------')
+def print_arguments(args, logger):
+    logger.info('-----------  Configuration Arguments -----------')
     for arg, value in sorted(six.iteritems(vars(args))):
-        log.info('%s: %s' % (arg, value))
-    log.info('------------------------------------------------')
+        logger.info('%s: %s' % (arg, value))
+    logger.info('------------------------------------------------')
 
 
 def check_cuda(use_cuda, err = \

@@ -120,7 +120,7 @@ Given a list of queries and paragraphs (and titles), returns their matching scor
 
 #### [`model.train(train_set: str, epoch: int, save_model_path: str, args)`](https://github.com/sfwydyc/my-rocketqa/blob/594877ca505053cb67c6b9b689dbbf237f074ac4/rocketqa/encoder/dual_encoder.py#L247)
 
-Train Dual-encoder model according to parameters. Train_set, epoch and save_model_path is necessary, and other parameters like save_steps and learning_rate can also be set. Please see examples/example.py for detail.
+Train Dual-encoder model according to parameters. `Train_set`, `epoch` and `save_model_path` is necessary, and other parameters like `save_steps` and `learning_rate` can also be set. Please see examples/example.py for detail.
 
 ### Cross encoder
 Cross-encoder returned by "load_model()" supports the following function:
@@ -131,7 +131,7 @@ Given a list of queries and paragraphs (and titles), returns their matching scor
   
 #### [`model.train(train_set: str, epoch: int, save_model_path: str, args)`](https://github.com/sfwydyc/my-rocketqa/blob/594877ca505053cb67c6b9b689dbbf237f074ac4/rocketqa/encoder/dual_encoder.py#L247)
 
-Train Dual-encoder model according to parameters. Train_set, epoch and save_model_path is necessary, and other parameters like save_steps and learning_rate can also be set. Please see examples/example.py for detail.
+Train Dual-encoder model according to parameters. `Train_set`, `epoch` and `save_model_path` is necessary, and other parameters like `save_steps` and `learning_rate` can also be set. Please see examples/example.py for detail.
 
 
 ### Examples
@@ -158,7 +158,37 @@ p_embs = dual_encoder.encode_para(para=para_list)
 dot_products = dual_encoder.matching(query=query_list, para=para_list)
 ```
 
+####  Train Your Own Model
+To train your own models, you can use 'train()' function with your dataset and parameters.
+
+```python
+import rocketqa
+
+# init cross encoder, and set device and batch_size
+cross_encoder = rocketqa.load_model(model="zh_dureader_ce_v2", use_cuda=True, device_id=0, batch_size=32)
+
+# finetune cross encoder based on "zh_dureader_ce_v2"
+cross_encoder.train('dureader-retrieval-baseline-dataset/train/cross.train.tsv', 2, 'ce_models', save_steps=1000, learning_rate=1e-5, log_folder='log_ce')
+
+```
   
+#### Run Your Own Model
+To run your own models, you should set parameter `model` in 'load_model()' with a JSON config file.
+
+```python
+import rocketqa
+
+# init cross encoder
+cross_encoder = rocketqa.load_model(model="./ce_models/config", use_cuda=True, device_id=0, batch_size=16)
+
+# compute relevance of query and para
+relevance = cross_encoder.matching(query=query_list, para=para_list)
+```
+
+config is a JSON file like this
+```
+```
+
 ## Citations
 
 If you find RocketQA v1 models helpful, feel free to cite our publication [RocketQA: An Optimized Training Approach to Dense Passage Retrieval for Open-Domain Question Answering](https://arxiv.org/pdf/2010.08191.pdf)

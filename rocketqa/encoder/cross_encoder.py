@@ -192,7 +192,6 @@ class CrossEncoder(object):
     def train(self, train_set, epoch, save_model_path, **kwargs):
         self._parse_train_args(train_set, epoch, save_model_path, kwargs)
         args = self.args
-        print_arguments(args)
         check_cuda(args.use_cuda)
         log = logging.getLogger()
 
@@ -201,6 +200,7 @@ class CrossEncoder(object):
         if not os.path.exists(self.args.log_folder):
             os.makedirs(self.args.log_folder)
         prepare_logger(log, save_to_file=self.args.log_folder + '/log.train')
+        print_arguments(args, log)
         dev_count = 1
 
         reader = reader_ce_train.CETrainReader(
@@ -238,6 +238,7 @@ class CrossEncoder(object):
         log.info("Num train examples: %d" % num_train_examples)
         log.info("Max train steps: %d" % max_train_steps)
         log.info("Num warmup steps: %d" % warmup_steps)
+        log.info("Learning rate: %f" % self.args.learning_rate)
 
         train_program = fluid.Program()
 
