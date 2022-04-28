@@ -14,7 +14,8 @@ In recent years, the dense retrievers based on pre-trained language models have 
 * ***Easy-to-use***: By integrating this toolkit with [JINA](https://jina.ai/), 🚀RocketQA can help developers build an end-to-end retrieval system and question answering system with several lines of code. <img src="https://github.com/PaddlePaddle/RocketQA/blob/main/RocketQA_flow.png" alt="" align=center />  
 
 ## News
-* April 29, 2022: Finetune function is added to RocketQA toolkit.
+* April 29, 2022: Training function is added to RocketQA toolkit.
+* April 29, 2022: The baseline models of **DuReader<sub>retrieval</sub>** (both cross encoder and dual encoder) are available in RocketQA models now. You can use them directly by `rocketqa.load_model`.
 * March 30, 2022: The baseline of **DuReader<sub>retrieval</sub>** [leaderboard](https://aistudio.baidu.com/aistudio/competition/detail/157/0/introduction) was released. [[code/model]](https://github.com/PaddlePaddle/RocketQA/tree/main/research/DuReader-Retrieval-Baseline)
 * March 30, 2022: We released **DuReader<sub>retrieval</sub>**, a large-scale Chinese benchmark for passage retrieval. The dataset contains over 90K questions and 8M passages from Baidu Search. [[paper]](https://arxiv.org/abs/2203.10232) [[data]](https://github.com/baidu/DuReader/tree/master/DuReader-Retrieval)
 * December 3, 2021: The toolkit of dense retriever RocketQA was released, including the first chinese dense retrieval model trained on DuReader. 
@@ -120,7 +121,7 @@ Given a list of queries and paragraphs (and titles), returns their matching scor
 
 #### [`model.train(train_set: str, epoch: int, save_model_path: str, args)`](https://github.com/sfwydyc/my-rocketqa/blob/594877ca505053cb67c6b9b689dbbf237f074ac4/rocketqa/encoder/dual_encoder.py#L247)
 
-Train Dual-encoder model according to parameters. `Train_set`, `epoch` and `save_model_path` is necessary, and other parameters like `save_steps` and `learning_rate` can also be set. Please see examples/example.py for detail.
+Given the hyperparameters `train_set`, `epoch` and `save_model_path`, you can train your own dual encoder model or finetune our models. Other settings like `save_steps` and `learning_rate` can also be setin `**kwargs`. Please see examples/example.py for detail.
 
 ### Cross encoder
 Cross-encoder returned by "load_model()" supports the following function:
@@ -131,7 +132,7 @@ Given a list of queries and paragraphs (and titles), returns their matching scor
   
 #### [`model.train(train_set: str, epoch: int, save_model_path: str, args)`](https://github.com/sfwydyc/my-rocketqa/blob/594877ca505053cb67c6b9b689dbbf237f074ac4/rocketqa/encoder/dual_encoder.py#L247)
 
-Train Dual-encoder model according to parameters. `Train_set`, `epoch` and `save_model_path` is necessary, and other parameters like `save_steps` and `learning_rate` can also be set. Please see examples/example.py for detail.
+Given the hyperparameters `train_set`, `epoch` and `save_model_path`, you can train your own cross encoder model or finetune our models. Other settings like `save_steps` and `learning_rate` can also be set in `**kwargs`. Please see examples/example.py for detail.
 
 
 ### Examples
@@ -197,6 +198,8 @@ config is a JSON file like this
     "share_parameter": 0
 }
 ```
+Folder `examples` provides more details.
+
 
 ## Citations
 
