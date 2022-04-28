@@ -187,6 +187,15 @@ relevance = cross_encoder.matching(query=query_list, para=para_list)
 
 config is a JSON file like this
 ```
+{
+    "model_type": "cross_encoder",
+    "max_seq_len": 384,
+    "model_conf_path": "zh_config.json",
+    "model_vocab_path": "zh_vocab.txt",
+    "model_checkpoint_path": ${YOUR_MODEL},
+    "for_cn": true,
+    "share_parameter": 0
+}
 ```
 
 ## Citations
