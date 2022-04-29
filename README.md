@@ -121,7 +121,7 @@ Given a list of queries and paragraphs (and titles), returns their matching scor
 
 #### [`model.train(train_set: str, epoch: int, save_model_path: str, args)`](https://github.com/sfwydyc/my-rocketqa/blob/594877ca505053cb67c6b9b689dbbf237f074ac4/rocketqa/encoder/dual_encoder.py#L247)
 
-Given the hyperparameters `train_set`, `epoch` and `save_model_path`, you can train your own dual encoder model or finetune our models. Other settings like `save_steps` and `learning_rate` can also be setin `**kwargs`. Please see examples/example.py for detail.
+Given the hyperparameters `train_set`, `epoch` and `save_model_path`, you can train your own dual encoder model or finetune our models. Other settings like `save_steps` and `learning_rate` can also be set in `args`. Please see examples/example.py for detail.
 
 ### Cross encoder
 Cross-encoder returned by "load_model()" supports the following function:
@@ -132,7 +132,7 @@ Given a list of queries and paragraphs (and titles), returns their matching scor
   
 #### [`model.train(train_set: str, epoch: int, save_model_path: str, args)`](https://github.com/sfwydyc/my-rocketqa/blob/594877ca505053cb67c6b9b689dbbf237f074ac4/rocketqa/encoder/dual_encoder.py#L247)
 
-Given the hyperparameters `train_set`, `epoch` and `save_model_path`, you can train your own cross encoder model or finetune our models. Other settings like `save_steps` and `learning_rate` can also be set in `**kwargs`. Please see examples/example.py for detail.
+Given the hyperparameters `train_set`, `epoch` and `save_model_path`, you can train your own cross encoder model or finetune our models. Other settings like `save_steps` and `learning_rate` can also be set in `args`. Please see examples/example.py for detail.
 
 
 ### Examples

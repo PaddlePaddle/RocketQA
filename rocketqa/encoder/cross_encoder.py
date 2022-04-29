@@ -21,6 +21,7 @@ from __future__ import absolute_import
 
 import os
 import json
+import math
 import multiprocessing
 import random
 import numpy as np
@@ -229,7 +230,7 @@ class CrossEncoder(object):
 
         num_train_examples = reader.get_num_examples(args.train_set)
         if self.args.save_steps == 0:
-            self.args.save_steps = num_train_examples * self.args.epoch // self.args.batch_size // 2
+            self.args.save_steps = int(math.ceil(num_train_examples * self.args.epoch / self.args.batch_size / 2))
 
         max_train_steps = args.epoch * num_train_examples // args.batch_size // dev_count
 

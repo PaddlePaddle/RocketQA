@@ -20,6 +20,7 @@ from __future__ import absolute_import
 
 import os
 import json
+import math
 import logging
 import time
 import multiprocessing
@@ -282,7 +283,7 @@ class DualEncoder(object):
 
         num_train_examples = reader.get_num_examples(self.args.train_set)
         if self.args.save_steps == 0:
-            self.args.save_steps = num_train_examples * self.args.epoch // self.args.batch_size // 2
+            self.args.save_steps = int(math.ceil(num_train_examples * self.args.epoch / self.args.batch_size / 2))
 
         max_train_steps = self.args.epoch * num_train_examples // self.args.batch_size // dev_count
 
