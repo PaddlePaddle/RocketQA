@@ -160,7 +160,7 @@ dot_products = dual_encoder.matching(query=query_list, para=para_list)
 ```
 
 ####  Train Your Own Model
-To train your own models, you can use 'train()' function with your dataset and parameters.
+To train your own models, you can use 'train()' function with your dataset and parameters.The training data format refers to ./examples/data/cross.train.tsv, which contains 4 columns: query, title, para, label (0 or 1), separated by "\t"
 
 ```python
 import rocketqa
@@ -169,7 +169,7 @@ import rocketqa
 cross_encoder = rocketqa.load_model(model="zh_dureader_ce_v2", use_cuda=True, device_id=0, batch_size=32)
 
 # finetune cross encoder based on "zh_dureader_ce_v2"
-cross_encoder.train('dureader-retrieval-baseline-dataset/train/cross.train.tsv', 2, 'ce_models', save_steps=1000, learning_rate=1e-5, log_folder='log_ce')
+cross_encoder.train('./examples/data/cross.train.tsv', 2, 'ce_models', save_steps=1000, learning_rate=1e-5, log_folder='log_ce')
 
 ```
   
@@ -180,7 +180,7 @@ To run your own models, you should set parameter `model` in 'load_model()' with 
 import rocketqa
 
 # init cross encoder
-cross_encoder = rocketqa.load_model(model="./ce_models/config", use_cuda=True, device_id=0, batch_size=16)
+cross_encoder = rocketqa.load_model(model="./examples/ce_models/config.json", use_cuda=True, device_id=0, batch_size=16)
 
 # compute relevance of query and para
 relevance = cross_encoder.matching(query=query_list, para=para_list)
