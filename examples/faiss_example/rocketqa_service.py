@@ -2,6 +2,7 @@ import os
 import sys
 import json
 import faiss
+import numpy as np
 from tornado import web
 from tornado import ioloop
 import rocketqa
@@ -70,6 +71,7 @@ class RocketQAServer(web.RequestHandler):
 
         # encode query
         q_embs = self._dual_encoder.encode_query(query=[query])
+        q_embs = np.array(list(q_embs))
 
         # search with faiss
         search_result = self._faiss_tool.search(q_embs, topk)
@@ -83,6 +85,7 @@ class RocketQAServer(web.RequestHandler):
             titles.append(t)
             paras.append(p)
         ranking_score = self._cross_encoder.matching(query=queries, para=paras, title=titles)
+        ranking_score = list(ranking_score)
 
         final_result = {}
         for i in range(len(paras)):
@@ -106,8 +109,8 @@ def create_rocketqa_app(sub_address, rocketqa_server, language, data_file, index
     Create RocketQA server application
     """
     if language == 'zh':
-        de_model = 'zh_dureader_de'
-        ce_model = 'zh_dureader_ce'
+        de_model = 'zh_dureader_de_v2'
+        ce_model = 'zh_dureader_ce_v2'
     else:
         de_model = 'v1_marco_de'
         ce_model = 'v1_marco_ce'
@@ -142,7 +145,7 @@ if __name__ == "__main__":
         print ("USAGE: ")
         print ("      python3 rocketqa_service.py ${language} ${data_file} ${index_file}")
         print ("--For Example:")
-        print ("      python3 rocketqa_service.py en ../marco.tp.1k marco_test.index")
+        print ("      python3 rocketqa_service.py zh ../data/dureader.para test.index")
         exit()
 
     language = sys.argv[1]
