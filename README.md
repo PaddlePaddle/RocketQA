@@ -14,8 +14,7 @@ In recent years, the dense retrievers based on pre-trained language models have 
 * ***Easy-to-use***: By integrating this toolkit with [JINA](https://jina.ai/), 🚀RocketQA can help developers build an end-to-end retrieval system and question answering system with several lines of code. <img src="https://github.com/PaddlePaddle/RocketQA/blob/main/RocketQA_flow.png" alt="" align=center />  
 
 ## News
-* April 29, 2022: Training function is added to RocketQA toolkit.
-* April 29, 2022: The baseline models of **DuReader<sub>retrieval</sub>** (both cross encoder and dual encoder) are available in RocketQA models now. You can use them directly by `rocketqa.load_model`.
+* April 29, 2022: **Training function** is added to RocketQA toolkit. And the baseline models of **DuReader<sub>retrieval</sub>** (both cross encoder and dual encoder) are available in RocketQA models.
 * March 30, 2022: The baseline of **DuReader<sub>retrieval</sub>** [leaderboard](https://aistudio.baidu.com/aistudio/competition/detail/157/0/introduction) was released. [[code/model]](https://github.com/PaddlePaddle/RocketQA/tree/main/research/DuReader-Retrieval-Baseline)
 * March 30, 2022: We released **DuReader<sub>retrieval</sub>**, a large-scale Chinese benchmark for passage retrieval. The dataset contains over 90K questions and 8M passages from Baidu Search. [[paper]](https://arxiv.org/abs/2203.10232) [[data]](https://github.com/baidu/DuReader/tree/master/DuReader-Retrieval)
 * December 3, 2021: The toolkit of dense retriever RocketQA was released, including the first chinese dense retrieval model trained on DuReader. 
@@ -39,7 +38,7 @@ $ pip install paddlepaddle-gpu
 $ pip install paddlepaddle
 ```
 
-Second, install rocketqa package:
+Second, install rocketqa package (latest version: 1.1.0):
 ```bash
 $ pip install rocketqa
 ```
@@ -81,10 +80,10 @@ cd examples/faiss_example/
 pip3 install -r requirements.txt
 
 # Generate vector representations and build a libray for your Documents
-python3 index.py en ../marco.tp.1k marco_index
+python3 index.py zh ../data/dureader.para test_index
 
 # Start a web service on http://localhost:8888/rocketqa
-python3 rocketqa_service.py en ../marco.tp.1k marco_index
+python3 rocketqa_service.py zh ../data/dureader.para test_index
 
 # Try some questions related to the indexed Documents
 python3 query.py
@@ -107,32 +106,32 @@ Returns the model specified by the input parameter. It can initialize both dual 
 ### Dual encoder
 Dual-encoder returned by "load_model()" supports the following functions:
 
-#### [`model.encode_query(query: List[str])`](https://github.com/PaddlePaddle/RocketQA/blob/3a99cf2720486df8cc54acc0e9ce4cbcee993413/rocketqa/predict/dual_encoder.py#L126)
+#### [`model.encode_query(query: List[str])`](https://github.com/PaddlePaddle/RocketQA/blob/1746b938d659c7f8d0b9f960e3199dcbd945adac/rocketqa/encoder/dual_encoder.py#L151)
 
 Given a list of queries, returns their representation vectors encoded by model.
 
-#### [`model.encode_para(para: List[str], title: List[str])`](https://github.com/PaddlePaddle/RocketQA/blob/3a99cf2720486df8cc54acc0e9ce4cbcee993413/rocketqa/predict/dual_encoder.py#L154)
+#### [`model.encode_para(para: List[str], title: List[str])`](https://github.com/PaddlePaddle/RocketQA/blob/1746b938d659c7f8d0b9f960e3199dcbd945adac/rocketqa/encoder/dual_encoder.py#L179)
 
 Given a list of paragraphs and their corresponding titles (optional), returns their representations vectors encoded by model.
 
-#### [`model.matching(query: List[str], para: List[str], title: List[str])`](https://github.com/PaddlePaddle/RocketQA/blob/3a99cf2720486df8cc54acc0e9ce4cbcee993413/rocketqa/predict/dual_encoder.py#L187)
+#### [`model.matching(query: List[str], para: List[str], title: List[str])`](https://github.com/PaddlePaddle/RocketQA/blob/1746b938d659c7f8d0b9f960e3199dcbd945adac/rocketqa/encoder/dual_encoder.py#L212)
 
 Given a list of queries and paragraphs (and titles), returns their matching scores (dot product between two representation vectors). 
 
-#### [`model.train(train_set: str, epoch: int, save_model_path: str, args)`](https://github.com/sfwydyc/my-rocketqa/blob/594877ca505053cb67c6b9b689dbbf237f074ac4/rocketqa/encoder/dual_encoder.py#L247)
+#### [`model.train(train_set: str, epoch: int, save_model_path: str, args)`](https://github.com/PaddlePaddle/RocketQA/blob/1746b938d659c7f8d0b9f960e3199dcbd945adac/rocketqa/encoder/dual_encoder.py#L247)
 
-Given the hyperparameters `train_set`, `epoch` and `save_model_path`, you can train your own dual encoder model or finetune our models. Other settings like `save_steps` and `learning_rate` can also be set in `args`. Please see examples/example.py for detail.
+Given the hyperparameters `train_set`, `epoch` and `save_model_path`, you can train your own dual encoder model or finetune our models. Other settings like `save_steps` and `learning_rate` can also be set in `args`. Please refer to examples/example.py for detail.
 
 ### Cross encoder
 Cross-encoder returned by "load_model()" supports the following function:
 
-#### [`model.matching(query: List[str], para: List[str], title: List[str])`](https://github.com/PaddlePaddle/RocketQA/blob/3a99cf2720486df8cc54acc0e9ce4cbcee993413/rocketqa/predict/cross_encoder.py#L129)
+#### [`model.matching(query: List[str], para: List[str], title: List[str])`](https://github.com/PaddlePaddle/RocketQA/blob/1746b938d659c7f8d0b9f960e3199dcbd945adac/rocketqa/encoder/cross_encoder.py#L156)
 
 Given a list of queries and paragraphs (and titles), returns their matching scores (probability that the paragraph is the query's right answer).
   
-#### [`model.train(train_set: str, epoch: int, save_model_path: str, args)`](https://github.com/sfwydyc/my-rocketqa/blob/594877ca505053cb67c6b9b689dbbf237f074ac4/rocketqa/encoder/dual_encoder.py#L247)
+#### [`model.train(train_set: str, epoch: int, save_model_path: str, args)`](https://github.com/PaddlePaddle/RocketQA/blob/1746b938d659c7f8d0b9f960e3199dcbd945adac/rocketqa/encoder/cross_encoder.py#L193)
 
-Given the hyperparameters `train_set`, `epoch` and `save_model_path`, you can train your own cross encoder model or finetune our models. Other settings like `save_steps` and `learning_rate` can also be set in `args`. Please see examples/example.py for detail.
+Given the hyperparameters `train_set`, `epoch` and `save_model_path`, you can train your own cross encoder model or finetune our models. Other settings like `save_steps` and `learning_rate` can also be set in `args`. Please refer to examples/example.py for detail.
 
 
 ### Examples
@@ -160,13 +159,13 @@ dot_products = dual_encoder.matching(query=query_list, para=para_list)
 ```
 
 ####  Train Your Own Model
-To train your own models, you can use 'train()' function with your dataset and parameters.The training data format refers to ./examples/data/cross.train.tsv, which contains 4 columns: query, title, para, label (0 or 1), separated by "\t"
+To train your own models, you can use `train()` function with your dataset and parameters. Training data contains 4 columns: query, title, para, label (0 or 1), separated by "\t". For detail about parameters and dataset, please refer to './examples/example.py'
 
 ```python
 import rocketqa
 
 # init cross encoder, and set device and batch_size
-cross_encoder = rocketqa.load_model(model="zh_dureader_ce_v2", use_cuda=True, device_id=0, batch_size=32)
+cross_encoder = rocketqa.load_model(model="zh_dureader_ce", use_cuda=True, device_id=0, batch_size=32)
 
 # finetune cross encoder based on "zh_dureader_ce_v2"
 cross_encoder.train('./examples/data/cross.train.tsv', 2, 'ce_models', save_steps=1000, learning_rate=1e-5, log_folder='log_ce')
