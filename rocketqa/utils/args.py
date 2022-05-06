@@ -35,7 +35,8 @@ def prepare_logger(logger, debug=False, save_to_file=None):
     console_hdl = logging.StreamHandler()
     console_hdl.setFormatter(formatter)
     logger.addHandler(console_hdl)
-    if save_to_file is not None and not os.path.exists(save_to_file):
+    #if save_to_file is not None and not os.path.exists(save_to_file):
+    if save_to_file is not None:
         file_hdl = logging.FileHandler(save_to_file)
         file_hdl.setFormatter(formatter)
         logger.addHandler(file_hdl)
@@ -64,11 +65,11 @@ class ArgumentGroup(object):
             **kwargs)
 
 
-def print_arguments(args):
-    log.info('-----------  Configuration Arguments -----------')
+def print_arguments(args, logger):
+    logger.info('-----------  Configuration Arguments -----------')
     for arg, value in sorted(six.iteritems(vars(args))):
-        log.info('%s: %s' % (arg, value))
-    log.info('------------------------------------------------')
+        logger.info('%s: %s' % (arg, value))
+    logger.info('------------------------------------------------')
 
 
 def check_cuda(use_cuda, err = \

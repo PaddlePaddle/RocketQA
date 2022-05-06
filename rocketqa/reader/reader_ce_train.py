@@ -26,16 +26,22 @@ import numpy as np
 import six
 from io import open
 from collections import namedtuple
-
 from rocketqa.utils import tokenization
 from rocketqa.utils.batching import pad_batch_data
 
+
+
 log = logging.getLogger(__name__)
 
-def csv_reader(fd, delimiter='\t'):
+def csv_reader(fd, delimiter='\t', trainer_id=0, trainer_num=1):
     def gen():
-        for i in fd:
-            yield i.rstrip('\n').split(delimiter)
+        for i, line in enumerate(fd):
+            if i % trainer_num == trainer_id:
+                slots = line.rstrip('\n').split(delimiter)
+                if len(slots) == 1:
+                    yield slots,
+                else:
+                    yield slots
     return gen()
 
 
@@ -43,8 +49,8 @@ class BaseReader(object):
     def __init__(self,
                  vocab_path,
                  label_map_config=None,
-                 q_max_seq_len=128,
-                 p_max_seq_len=512,
+                 max_seq_len=512,
+                 total_num=0,
                  do_lower_case=True,
                  in_tokens=False,
                  is_inference=False,
@@ -52,8 +58,7 @@ class BaseReader(object):
                  tokenizer="FullTokenizer",
                  for_cn=True,
                  task_id=0):
-        self.q_max_seq_len = q_max_seq_len
-        self.p_max_seq_len = p_max_seq_len
+        self.max_seq_len = max_seq_len
         self.tokenizer = tokenization.FullTokenizer(
             vocab_file=vocab_path, do_lower_case=do_lower_case)
         self.vocab = self.tokenizer.vocab
@@ -70,6 +75,7 @@ class BaseReader(object):
         self.current_example = 0
         self.current_epoch = 0
         self.num_examples = 0
+        self.total_num = total_num
 
         if label_map_config:
             with open(label_map_config, encoding='utf8') as f:
@@ -81,7 +87,7 @@ class BaseReader(object):
         """Gets progress for training phase."""
         return self.current_example, self.current_epoch
 
-    def _read_tsv(self, input_file, batch_size=16, quotechar=None):
+    def _read_tsv(self, input_file, quotechar=None):
         """Reads a tab separated value file."""
         with open(input_file, 'r', encoding='utf8') as f:
             reader = csv_reader(f)
@@ -110,107 +116,99 @@ class BaseReader(object):
             else:
                 tokens_b.pop()
 
-    def _convert_example_to_record(self, example, q_max_seq_length, p_max_seq_length, tokenizer):
+    def _convert_example_to_record(self, example, max_seq_length, tokenizer):
         """Converts a single `Example` into a single `Record`."""
 
         query = tokenization.convert_to_unicode(example.query)
-        tokens_query = tokenizer.tokenize(query)
-        self._truncate_seq_pair([], tokens_query, q_max_seq_length - 2)
+        tokens_a = tokenizer.tokenize(query)
+        tokens_b = None
 
         title = tokenization.convert_to_unicode(example.title)
-        tokens_title = tokenizer.tokenize(title)
+        tokens_b = tokenizer.tokenize(title)
 
         para = tokenization.convert_to_unicode(example.para)
         tokens_para = tokenizer.tokenize(para)
 
-        self._truncate_seq_pair(tokens_title, tokens_para, p_max_seq_length - 3)
+        tokens_b.extend(tokens_para)
 
-        ### query
-        tokens_q = []
-        text_type_ids_q = []
-        tokens_q.append("[CLS]")
-        text_type_ids_q.append(0)
-        for token in tokens_query:
-            tokens_q.append(token)
-            text_type_ids_q.append(0)
-        tokens_q.append("[SEP]")
-        text_type_ids_q.append(0)
+        self._truncate_seq_pair(tokens_a, tokens_b, max_seq_length - 3)
 
-        token_ids_q = tokenizer.convert_tokens_to_ids(tokens_q)
-        position_ids_q = list(range(len(token_ids_q)))
+        # The convention in BERT/ERNIE is:
+        # (a) For sequence pairs:
+        #  tokens:   [CLS] is this jack ##son ##ville ? [SEP] no it is not . [SEP]
+        #  type_ids: 0     0  0    0    0     0       0 0     1  1  1  1   1 1
+        # (b) For single sequences:
+        #  tokens:   [CLS] the dog is hairy . [SEP]
+        #  type_ids: 0     0   0   0  0     0 0
+        #
+        # Where "type_ids" are used to indicate whether this is the first
+        # sequence or the second sequence. The embedding vectors for `type=0` and
+        # `type=1` were learned during pre-training and are added to the wordpiece
+        # embedding vector (and position vector). This is not *strictly* necessary
+        # since the [SEP] token unambiguously separates the sequences, but it makes
+        # it easier for the model to learn the concept of sequences.
+        #
+        # For classification tasks, the first vector (corresponding to [CLS]) is
+        # used as as the "sentence vector". Note that this only makes sense because
+        # the entire model is fine-tuned.
+        tokens = []
+        text_type_ids = []
+        tokens.append("[CLS]")
+        text_type_ids.append(0)
+        for token in tokens_a:
+            tokens.append(token)
+            text_type_ids.append(0)
+        tokens.append("[SEP]")
+        text_type_ids.append(0)
 
-        ### title-para
-        tokens_p = []
-        text_type_ids_p = []
-        tokens_p.append("[CLS]")
-        text_type_ids_p.append(0)
+        if tokens_b:
+            for token in tokens_b:
+                tokens.append(token)
+                text_type_ids.append(1)
+            tokens.append("[SEP]")
+            text_type_ids.append(1)
 
-        for token in tokens_title:
-            tokens_p.append(token)
-            text_type_ids_p.append(0)
-        tokens_p.append("[SEP]")
-        text_type_ids_p.append(0)
-
-        for token in tokens_para:
-            tokens_p.append(token)
-            text_type_ids_p.append(1)
-        tokens_p.append("[SEP]")
-        text_type_ids_p.append(1)
-
-        token_ids_p = tokenizer.convert_tokens_to_ids(tokens_p)
-        position_ids_p = list(range(len(token_ids_p)))
+        token_ids = tokenizer.convert_tokens_to_ids(tokens)
+        position_ids = list(range(len(token_ids)))
 
         if self.is_inference:
             Record = namedtuple('Record',
-            ['token_ids_q', 'text_type_ids_q', 'position_ids_q', \
-             'token_ids_p', 'text_type_ids_p', 'position_ids_p'])
+                                ['token_ids', 'text_type_ids', 'position_ids'])
             record = Record(
-                token_ids_q=token_ids_q,
-                text_type_ids_q=text_type_ids_q,
-                position_ids_q=position_ids_q,
-                token_ids_p=token_ids_p,
-                text_type_ids_p=text_type_ids_p,
-                position_ids_p=position_ids_p)
+                token_ids=token_ids,
+                text_type_ids=text_type_ids,
+                position_ids=position_ids)
         else:
             if self.label_map:
                 label_id = self.label_map[example.label]
             else:
                 label_id = example.label
 
-            Record = namedtuple('Record',
-                ['token_ids_q', 'text_type_ids_q', 'position_ids_q', \
-                 'token_ids_p', 'text_type_ids_p', 'position_ids_p', \
-                 'label_id', 'qid'
-                ])
+            Record = namedtuple('Record', [
+                'token_ids', 'text_type_ids', 'position_ids', 'label_id', 'qid'
+            ])
 
             qid = None
             if "qid" in example._fields:
                 qid = example.qid
 
             record = Record(
-                token_ids_q=token_ids_q,
-                text_type_ids_q=text_type_ids_q,
-                position_ids_q=position_ids_q,
-                token_ids_p=token_ids_p,
-                text_type_ids_p=text_type_ids_p,
-                position_ids_p=position_ids_p,
+                token_ids=token_ids,
+                text_type_ids=text_type_ids,
+                position_ids=position_ids,
                 label_id=label_id,
                 qid=qid)
         return record
 
-    def _prepare_batch_data(self, examples, batch_size, phase=None, read_id=False):
+    def _prepare_batch_data(self, examples, batch_size, phase=None):
         """generate batch records"""
         batch_records, max_len = [], 0
         for index, example in enumerate(examples):
             if phase == "train":
                 self.current_example = index
-            if read_id is False:
-                record = self._convert_example_to_record(example, self.q_max_seq_len,
-                                                         self.p_max_seq_len, self.tokenizer)
-            else:
-                record = self._convert_example_id_to_record(example, self.q_max_seq_len,
-                                                         self.p_max_seq_len, self.tokenizer)
-            max_len = max(max_len, len(record.token_ids_p))
+            record = self._convert_example_to_record(example, self.max_seq_len,
+                                                     self.tokenizer)
+            max_len = max(max_len, len(record.token_ids))
             if self.in_tokens:
                 to_append = (len(batch_records) + 1) * max_len <= batch_size
             else:
@@ -219,8 +217,7 @@ class BaseReader(object):
                 batch_records.append(record)
             else:
                 yield self._pad_batch_records(batch_records)
-                max_len = len(record.token_ids_p)
-                batch_records = [record]
+                batch_records, max_len = [record], len(record.token_ids)
 
         if batch_records:
             yield self._pad_batch_records(batch_records)
@@ -234,10 +231,19 @@ class BaseReader(object):
                        batch_size,
                        epoch,
                        dev_count=1,
+                       trainer_id=0,
+                       trainer_num=1,
                        shuffle=True,
-                       phase=None,
-                       read_id=False):
-        examples = self._read_tsv(input_file, batch_size)
+                       phase=None):
+
+        if phase == 'train':
+#            examples = examples[trainer_id: (len(examples) //trainer_num) * trainer_num : trainer_num]
+            self.num_examples_per_node = self.total_num // trainer_num
+            self.num_examples = self.num_examples_per_node * trainer_num
+            examples = self._read_tsv(input_file, trainer_id=trainer_id, trainer_num=trainer_num, num_examples=self.num_examples_per_node)
+            log.info('apply sharding %d/%d' % (trainer_id, trainer_num))
+        else:
+            examples = self._read_tsv(input_file)
 
         def wrapper():
             all_dev_batches = []
@@ -249,7 +255,7 @@ class BaseReader(object):
                     np.random.shuffle(examples)
 
                 for batch_data in self._prepare_batch_data(
-                        examples, batch_size, phase=phase, read_id=read_id):
+                        examples, batch_size, phase=phase):
                     if len(all_dev_batches) < dev_count:
                         all_dev_batches.append(batch_data)
                     if len(all_dev_batches) == dev_count:
@@ -266,64 +272,35 @@ class BaseReader(object):
         return f
 
 
-class DEPredictorReader(BaseReader):
-    def _read_samples(self, batch_samples, quotechar=None):
-        headers = 'query\ttitle\tpara\tlabel'.split('\t')
-        Example = namedtuple('Example', headers)
+class CETrainReader(BaseReader):
+    def _read_tsv(self, input_file, quotechar=None, trainer_id=0, trainer_num=1, num_examples=0):
+        """Reads a tab separated value file."""
+        with open(input_file, 'r', encoding='utf8') as f:
+            reader = csv_reader(f, trainer_id=trainer_id, trainer_num=trainer_num)
+            headers = 'query\ttitle\tpara\tlabel'.split('\t')
+            text_indices = [
+                index for index, h in enumerate(headers) if h != "label"
+            ]
+            Example = namedtuple('Example', headers)
 
-        examples = []
-        for data in batch_samples:
-            line = []
-            sample = data.strip().split('\t')
-            for i in range(3):
-                if self.for_cn:
-                    line.append(sample[i].replace(' ', ''))
-                else:
-                    line.append(sample[i])
-            line.append('0')
-            example = Example(*line)
-            examples.append(example)
-        return examples
-
-
-    def data_generator(self,
-                       samples,
-                       batch_size=32,
-                       dev_count=1,
-                       shuffle=False,
-                       phase=None,
-                       read_id=False):
-        examples = self._read_samples(samples)
-
-        def wrapper():
-            all_dev_batches = []
-
-            for batch_data in self._prepare_batch_data(
-                    examples, batch_size, phase=phase, read_id=read_id):
-                if len(all_dev_batches) < dev_count:
-                    all_dev_batches.append(batch_data)
-                if len(all_dev_batches) == dev_count:
-                    for batch in all_dev_batches:
-                        yield batch
-                    all_dev_batches = []
-
-        def f():
-            try:
-                for i in wrapper():
-                    yield i
-            except Exception as e:
-                import traceback
-                traceback.print_exc()
-        return f
+            examples = []
+            for cnt, line in enumerate(reader):
+                if num_examples != 0 and cnt == num_examples:
+                    break
+                for index, text in enumerate(line):
+                    if index in text_indices:
+                        if self.for_cn:
+                            line[index] = text.replace(' ', '')
+                        else:
+                            line[index] = text
+                example = Example(*line)
+                examples.append(example)
+            return examples
 
     def _pad_batch_records(self, batch_records):
-        batch_token_ids_q = [record.token_ids_q for record in batch_records]
-        batch_text_type_ids_q = [record.text_type_ids_q for record in batch_records]
-        batch_position_ids_q = [record.position_ids_q for record in batch_records]
-
-        batch_token_ids_p = [record.token_ids_p for record in batch_records]
-        batch_text_type_ids_p = [record.text_type_ids_p for record in batch_records]
-        batch_position_ids_p = [record.position_ids_p for record in batch_records]
+        batch_token_ids = [record.token_ids for record in batch_records]
+        batch_text_type_ids = [record.text_type_ids for record in batch_records]
+        batch_position_ids = [record.position_ids for record in batch_records]
 
         if not self.is_inference:
             batch_labels = [record.label_id for record in batch_records]
@@ -338,27 +315,18 @@ class DEPredictorReader(BaseReader):
                 batch_qids = np.array([]).astype("int64").reshape([-1, 1])
 
         # padding
-        padded_token_ids_q, input_mask_q = pad_batch_data(
-            batch_token_ids_q, pad_idx=self.pad_id, return_input_mask=True)
-        padded_text_type_ids_q = pad_batch_data(
-            batch_text_type_ids_q, pad_idx=self.pad_id)
-        padded_position_ids_q = pad_batch_data(
-            batch_position_ids_q, pad_idx=self.pad_id)
-        padded_task_ids_q = np.ones_like(padded_token_ids_q, dtype="int64") * self.task_id
-
-        padded_token_ids_p, input_mask_p = pad_batch_data(
-            batch_token_ids_p, pad_idx=self.pad_id, return_input_mask=True)
-        padded_text_type_ids_p = pad_batch_data(
-            batch_text_type_ids_p, pad_idx=self.pad_id)
-        padded_position_ids_p = pad_batch_data(
-            batch_position_ids_p, pad_idx=self.pad_id)
-        padded_task_ids_p = np.ones_like(padded_token_ids_p, dtype="int64") * self.task_id
+        padded_token_ids, input_mask = pad_batch_data(
+            batch_token_ids, pad_idx=self.pad_id, return_input_mask=True)
+        padded_text_type_ids = pad_batch_data(
+            batch_text_type_ids, pad_idx=self.pad_id)
+        padded_position_ids = pad_batch_data(
+            batch_position_ids, pad_idx=self.pad_id)
+        padded_task_ids = np.ones_like(
+            padded_token_ids, dtype="int64") * self.task_id
 
         return_list = [
-            padded_token_ids_q, padded_text_type_ids_q, padded_position_ids_q, padded_task_ids_q,
-            input_mask_q,
-            padded_token_ids_p, padded_text_type_ids_p, padded_position_ids_p, padded_task_ids_p,
-            input_mask_p,
+            padded_token_ids, padded_text_type_ids, padded_position_ids,
+            padded_task_ids, input_mask
         ]
         if not self.is_inference:
             return_list += [batch_labels, batch_qids]
