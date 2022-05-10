@@ -1,3 +1,4 @@
+import numpy as np
 from jina import Executor, requests
 
 import rocketqa
@@ -36,4 +37,5 @@ class RocketQADualEncoder(Executor):
     def encode_question(self, docs, **kwargs):
         for doc in docs:
             query_emb = self.encoder.encode_query(query=[doc.text])
+            query_emb = np.array(list(query_emb))
             doc.embedding = query_emb.squeeze()

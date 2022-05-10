@@ -36,6 +36,7 @@ class RocketQAReranker(Executor):
             for matches in match_batches_generator:
                 titles, paras = matches.get_attributes('tags__title', 'tags__para')
                 score_list = self.encoder.matching(query=[question] * len(paras), para=paras, title=titles)
+                score_list = list(score_list)
                 reranked_scores.extend(score_list)
                 unsorted_matches += list(matches)
             sorted_args = np.argsort(reranked_scores).tolist()
