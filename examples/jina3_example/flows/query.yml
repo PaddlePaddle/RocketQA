@@ -1,0 +1,31 @@
+!Flow
+version: '1'
+with:
+  port_expose: $JINA_PORT_EXPOSE
+  protocol: 'http'
+  cors: True
+executors:
+  - name: du_encoder
+    uses: RocketQADualEncoder
+    py_module:
+        - rocketqa_encoder/executor.py
+    uses_with:
+        model: zh_dureader_de_v2
+        use_cuda: $JINA_USE_CUDA
+        device_id: 0
+        batch_size: 1
+    timeout_ready: '-1'
+  - name: vec_indexer
+    uses: jinahub://SimpleIndexer/latest
+    uses_metas:
+      workspace: $JINA_WORKSPACE
+  - name: ranker
+    uses: RocketQAReranker
+    py_module:
+        - rocketqa_reranker/executor.py
+    uses_with:
+        model: zh_dureader_ce_v2
+        use_cuda: $JINA_USE_CUDA
+        device_id: 0
+        batch_size: 32
+    timeout_ready: '-1'

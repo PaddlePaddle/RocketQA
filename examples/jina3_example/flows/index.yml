@@ -1,0 +1,16 @@
+!Flow
+version: '1'
+workspace: $JINA_WORKSPACE
+executors:
+  - name: du_encoder
+    uses: RocketQADualEncoder
+    py_module:
+        - rocketqa_encoder/executor.py
+    uses_with:
+        model: zh_dureader_de_v2
+        use_cuda: $JINA_USE_CUDA
+        device_id: 0
+        batch_size: 32
+    timeout_ready: '-1'
+  - name: vec_indexer
+    uses: jinahub://SimpleIndexer/latest

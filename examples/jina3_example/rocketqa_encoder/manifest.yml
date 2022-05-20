@@ -1,0 +1,5 @@
+manifest_version: 1
+name: RocketQADualEncoder
+description: `RocketQADualEncoder` calculates the `embedding` of the passages and questions with RocketQA Dual-Encoder models.
+keywords: [qa, text, PaddlePaddle, en, zh, encoder, rocketqa, marco]
+url: https://github.com/PaddlePaddle/RocketQA/tree/main/examples/jina_example/rocketqa_encoder

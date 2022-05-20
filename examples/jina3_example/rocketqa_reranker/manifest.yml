@@ -1,0 +1,5 @@
+manifest_version: 1
+name: RocketQAReranker
+description: RocketQAReranker rerank the matches based on the relavance to the query question using the matching from RocketQA models.
+keywords: [qa, text, PaddlePaddle, en, zh, ranker, matcher, rocketqa, marco]
+url: https://github.com/PaddlePaddle/RocketQA/tree/main/examples/jina_example/rocketqa_reranker
