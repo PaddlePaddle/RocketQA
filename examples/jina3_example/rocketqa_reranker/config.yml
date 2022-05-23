@@ -1,0 +1,6 @@
+jtype: RocketQAReranker
+metas:
+  py_modules:
+    - executor.py
+with:
+  model: zh_dureader_ce_v2

@@ -1,0 +1,6 @@
+jtype: RocketQADualEncoder
+metas:
+  py_modules:
+    - executor.py
+with:
+  model: zh_dureader_de_v2
