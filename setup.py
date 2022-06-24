@@ -22,7 +22,7 @@ with open("requirements.txt") as fin:
 
 setuptools.setup(
     name="rocketqa",
-    version="1.1.0",
+    version="1.1.1",
     author="dingyuchen",
     author_email="dingyuchen@baidu.com",
     description=long_description,

@@ -27,6 +27,7 @@ import random
 import numpy as np
 import logging
 import time
+import shutil
 
 # NOTE(paddle-dev): All of these flags should be
 # set before `import paddle`. Otherwise, it would
@@ -113,6 +114,7 @@ class CrossEncoder(object):
         args, unknown = parser.parse_known_args()
         with open(conf_path, 'r', encoding='utf8') as json_file:
             config_dict = json.load(json_file)
+        self.config_dict = config_dict
 
         args.do_train = False
         args.do_val = False
@@ -322,6 +324,10 @@ class CrossEncoder(object):
                     save_path = os.path.join(args.save_model_path,
                                             "step_" + str(steps))
                     fluid.io.save_persistables(self.exe, save_path, train_program)
+                    config_save_path = os.path.join(args.save_model_path, "config.json")
+                    json.dump(self.config_dict, open(config_save_path, "w"))
+                    shutil.copy(args.ernie_config_path, args.save_model_path)
+                    shutil.copy(args.vocab_path, args.save_model_path)
 
                 if last_epoch != current_epoch:
                     last_epoch = current_epoch
@@ -329,6 +335,10 @@ class CrossEncoder(object):
             except fluid.core.EOFException:
                 save_path = os.path.join(args.save_model_path, "step_" + str(steps))
                 fluid.io.save_persistables(self.exe, save_path, train_program)
+                config_save_path = os.path.join(args.save_model_path, "config.json")
+                json.dump(self.config_dict, open(config_save_path, "w"))
+                shutil.copy(args.ernie_config_path, args.save_model_path)
+                shutil.copy(args.vocab_path, args.save_model_path)
                 train_pyreader.reset()
                 break
 

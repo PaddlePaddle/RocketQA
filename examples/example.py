@@ -4,13 +4,13 @@ import rocketqa
 
 
 def train_dual_encoder(base_model, train_set):
-    dual_encoder = rocketqa.load_model(model=base_model, use_cuda=True, device_id=4, batch_size=32)
-    dual_encoder.train(train_set, 2, 'de_en_models', save_steps=10000, learning_rate=1e-5, log_folder='de_en_log')
+    dual_encoder = rocketqa.load_model(model=base_model, use_cuda=True, device_id=5, batch_size=16)
+    dual_encoder.train(train_set, 2, 'de_en_models', save_steps=10, learning_rate=1e-5, log_folder='de_en_log')
 
 
 def train_cross_encoder(base_model, train_set):
     cross_encoder = rocketqa.load_model(model=base_model, use_cuda=True, device_id=5, batch_size=16)
-    cross_encoder.train(train_set, 2, 'ce_en_models', save_steps=10000, learning_rate=1e-5, log_folder='ce_en_log')
+    cross_encoder.train(train_set, 2, 'ce_en_models', save_steps=10, learning_rate=1e-5, log_folder='ce_en_log')
 
 
 def test_dual_encoder(model, q_file, tp_file):
@@ -62,13 +62,13 @@ def test_cross_encoder(model, q_file, tp_file):
 
 if __name__ == "__main__":
     # finetune model
-    #train_dual_encoder('zh_dureader_de', './data/dual.train.tsv')
-    #train_cross_encoder('zh_dureader_ce', './data/cross.train.tsv')
+    train_dual_encoder('zh_dureader_de', './examples/data/dual.train.tsv')
+    # train_cross_encoder('zh_dureader_ce', './examples/data/cross.train.tsv')
 
     # test rocketqa model
     #test_dual_encoder('zh_dureader_de_v2', './data/dureader.q', './data/marco.tp.1k')
     #test_cross_encoder('zh_dureader_de_v2', './data/dureader.q', './data/marco.tp.1k')
 
     # test your own model
-    test_dual_encoder('./de_models/config.json', './data/dureader.q', './data/marco.tp.1k')
+    # test_dual_encoder('./de_models/config.json', './data/dureader.q', './data/marco.tp.1k')
     #test_cross_encoder('./ce_models/config.json', './data/dureader.q', './data/marco.tp.1k')

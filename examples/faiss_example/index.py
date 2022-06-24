@@ -11,6 +11,7 @@ def build_index(encoder_conf, index_file_name, title_list, para_list):
     para_embs = dual_encoder.encode_para(para=para_list, title=title_list)
     para_embs = np.array(list(para_embs))
 
+    print("Building index with Faiss...")
     indexer = faiss.IndexFlatIP(768)
     indexer.add(para_embs.astype('float32'))
     faiss.write_index(indexer, index_file_name)

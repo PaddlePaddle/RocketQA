@@ -25,6 +25,8 @@ import logging
 import time
 import multiprocessing
 import numpy as np
+from tqdm import tqdm, trange
+import shutil
 
 # NOTE(paddle-dev): All of these flags should be
 # set before `import paddle`. Otherwise, it would
@@ -109,6 +111,7 @@ class DualEncoder(object):
         args, unknown = parser.parse_known_args()
         with open(conf_path, 'r', encoding='utf8') as json_file:
             config_dict = json.load(json_file)
+        self.config_dict = config_dict
 
         args.do_train = False
         args.do_val = False
@@ -196,7 +199,8 @@ class DualEncoder(object):
         self.test_pyreader.start()
         fetch_list = [self.graph_vars["p_rep"]]
 
-        while True:
+        # while True:
+        for idx in trange(0, len(para), self.args.batch_size, desc='encode para'):
             try:
                 p_rep = self.exe.run(program=self.test_prog,
                                                 fetch_list=fetch_list)
@@ -372,6 +376,10 @@ class DualEncoder(object):
                     save_path = os.path.join(self.args.save_model_path,
                                             "step_" + str(steps))
                     fluid.io.save_persistables(self.exe, save_path, train_program)
+                    config_save_path = os.path.join(self.args.save_model_path, "config.json")
+                    json.dump(self.config_dict, open(config_save_path, "w"))
+                    shutil.copy(self.args.ernie_config_path, self.args.save_model_path)
+                    shutil.copy(self.args.vocab_path, self.args.save_model_path)
 
                 if last_epoch != current_epoch:
                     last_epoch = current_epoch
@@ -379,6 +387,10 @@ class DualEncoder(object):
             except fluid.core.EOFException:
                 save_path = os.path.join(self.args.save_model_path, "step_" + str(steps))
                 fluid.io.save_persistables(self.exe, save_path, train_program)
+                config_save_path = os.path.join(self.args.save_model_path, "config.json")
+                json.dump(self.config_dict, open(config_save_path, "w"))
+                shutil.copy(self.args.ernie_config_path, self.args.save_model_path)
+                shutil.copy(self.args.vocab_path, self.args.save_model_path)
                 train_pyreader.reset()
                 break
 
