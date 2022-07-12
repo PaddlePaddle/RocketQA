@@ -210,6 +210,8 @@ class DualEncoder(object):
                 self.test_pyreader.reset()
                 break
 
+        self.test_pyreader.reset()
+
         return
 
 
