@@ -14,6 +14,7 @@ In recent years, the dense retrievers based on pre-trained language models have 
 * ***Easy-to-use***: By integrating this toolkit with [JINA](https://jina.ai/), 🚀RocketQA can help developers build an end-to-end retrieval system and question answering system with several lines of code. <img src="https://github.com/PaddlePaddle/RocketQA/blob/main/RocketQA_flow.png" alt="" align=center />  
 
 ## News
+* 🎉 October 8, 2022: [DuReader<sub>retrieval</sub>](https://arxiv.org/abs/2203.10232) was accepted by EMNLP 2022. [[data]](https://github.com/baidu/DuReader/tree/master/DuReader-Retrieval)
 * April 29, 2022: **Training function** is added to RocketQA toolkit. And the baseline models of **DuReader<sub>retrieval</sub>** (both cross encoder and dual encoder) are available in RocketQA models.
 * March 30, 2022: The baseline of **DuReader<sub>retrieval</sub>** [leaderboard](https://aistudio.baidu.com/aistudio/competition/detail/157/0/introduction) was released. [[code/model]](https://github.com/PaddlePaddle/RocketQA/tree/main/research/DuReader-Retrieval-Baseline)
 * March 30, 2022: We released **DuReader<sub>retrieval</sub>**, a large-scale Chinese benchmark for passage retrieval. The dataset contains over 90K questions and 8M passages from Baidu Search. [[paper]](https://arxiv.org/abs/2203.10232) [[data]](https://github.com/baidu/DuReader/tree/master/DuReader-Retrieval)
@@ -239,6 +240,7 @@ If you find DuReader<sub>retrieval</sub> dataset helpful, feel free to cite our 
 @inproceedings{DuReader_retrieval,
     title="DuReader_retrieval: A Large-scale Chinese Benchmark for Passage Retrieval from Web Search Engine",
     author="Yifu Qiu, Hongyu Li, Yingqi Qu, Ying Chen, Qiaoqiao She, Jing Liu, Hua Wu and Haifeng Wang",
+    booktitle = "In Proceedings of EMNLP"
     year="2022"
 }
 ```
