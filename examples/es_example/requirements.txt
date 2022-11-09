@@ -1,0 +1,4 @@
+paddlepaddle==2.3.2
+rocketqa==1.1.0
+elasticsearch==8.5.0
+numpy==1.21.6
