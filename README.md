@@ -14,13 +14,14 @@ In recent years, the dense retrievers based on pre-trained language models have 
 * ***Easy-to-use***: By integrating this toolkit with [JINA](https://jina.ai/), 🚀RocketQA can help developers build an end-to-end retrieval system and question answering system with several lines of code. <img src="https://github.com/PaddlePaddle/RocketQA/blob/main/RocketQA_flow.png" alt="" align=center />  
 
 ## News
-* 🎉 October 8, 2022: [DuReader<sub>retrieval</sub>](https://arxiv.org/abs/2203.10232) was accepted by EMNLP 2022. [[data]](https://github.com/baidu/DuReader/tree/master/DuReader-Retrieval); The latest version of DuReader<sub>retrieval</sub> contains cross-lingual retrieval benchmarks. Stay tuned!
-* April 29, 2022: **Training function** is added to RocketQA toolkit. And the baseline models of **DuReader<sub>retrieval</sub>** (both cross encoder and dual encoder) are available in RocketQA models.
-* March 30, 2022: We released **DuReader<sub>retrieval</sub>**, a large-scale Chinese benchmark for passage retrieval. The dataset contains over 90K questions and 8M passages from Baidu Search. [[paper]](https://arxiv.org/abs/2203.10232) [[data]](https://github.com/baidu/DuReader/tree/master/DuReader-Retrieval) ; The baseline of **DuReader<sub>retrieval</sub>** [leaderboard](https://aistudio.baidu.com/aistudio/competition/detail/157/0/introduction) was also released. [[code/model]](https://github.com/PaddlePaddle/RocketQA/tree/main/research/DuReader-Retrieval-Baseline)
-* December 3, 2021: The toolkit of dense retriever RocketQA was released, including the first chinese dense retrieval model trained on DuReader. 
-* August 26, 2021: [RocketQA v2](https://arxiv.org/pdf/2110.07367.pdf) was accepted by EMNLP 2021. [[code/model]](https://github.com/PaddlePaddle/RocketQA/tree/main/research/RocketQAv2_EMNLP2021)
+* 🎉 Nov 27, 2022: Our survey paper on dense retrieval [Dense Text Retrieval based on Pretrained Language Models: A Survey](https://arxiv.org/pdf/2211.14876.pdf) was publicly available. 
+* Oct 8, 2022: [DuReader<sub>retrieval</sub>](https://arxiv.org/abs/2203.10232) was accepted by EMNLP 2022. [[data]](https://github.com/baidu/DuReader/tree/master/DuReader-Retrieval); The latest version of DuReader<sub>retrieval</sub> contains cross-lingual retrieval benchmarks. Stay tuned!
+* Apr 29, 2022: **Training function** is added to RocketQA toolkit. And the baseline models of **DuReader<sub>retrieval</sub>** (both cross encoder and dual encoder) are available in RocketQA models.
+* Mar 30, 2022: We released **DuReader<sub>retrieval</sub>**, a large-scale Chinese benchmark for passage retrieval. The dataset contains over 90K questions and 8M passages from Baidu Search. [[paper]](https://arxiv.org/abs/2203.10232) [[data]](https://github.com/baidu/DuReader/tree/master/DuReader-Retrieval) ; The baseline of **DuReader<sub>retrieval</sub>** [leaderboard](https://aistudio.baidu.com/aistudio/competition/detail/157/0/introduction) was also released. [[code/model]](https://github.com/PaddlePaddle/RocketQA/tree/main/research/DuReader-Retrieval-Baseline)
+* Dec 3, 2021: The toolkit of dense retriever RocketQA was released, including the first chinese dense retrieval model trained on DuReader. 
+* Aug 26, 2021: [RocketQA v2](https://arxiv.org/pdf/2110.07367.pdf) was accepted by EMNLP 2021. [[code/model]](https://github.com/PaddlePaddle/RocketQA/tree/main/research/RocketQAv2_EMNLP2021)
 * May 5, 2021: [PAIR](https://aclanthology.org/2021.findings-acl.191.pdf) was accepted by ACL 2021. [[code/model]](https://github.com/PaddlePaddle/RocketQA/tree/main/research/PAIR_ACL2021)
-* March 11, 2021: [RocketQA v1](https://arxiv.org/pdf/2010.08191.pdf) was accepted by NAACL 2021. [[code/model]](https://github.com/PaddlePaddle/RocketQA/tree/main/research/RocketQA_NAACL2021)
+* Mar 11, 2021: [RocketQA v1](https://arxiv.org/pdf/2010.08191.pdf) was accepted by NAACL 2021. [[code/model]](https://github.com/PaddlePaddle/RocketQA/tree/main/research/RocketQA_NAACL2021)
 
 
 ## Installation
@@ -241,6 +242,17 @@ If you find DuReader<sub>retrieval</sub> dataset helpful, feel free to cite our 
     author="Yifu Qiu, Hongyu Li, Yingqi Qu, Ying Chen, Qiaoqiao She, Jing Liu, Hua Wu and Haifeng Wang",
     booktitle = "In Proceedings of EMNLP"
     year="2022"
+}
+```
+
+If you find our survey useful for your work, please cite the following paper [Dense Text Retrieval based on Pretrained Language Models: A Survey](https://arxiv.org/pdf/2211.14876.pdf)
+
+```
+@article{DRSurvey,
+    title={Dense Text Retrieval based on Pretrained Language Models: A Survey},
+    author={Wayne Xin Zhao, Jing Liu, Ruiyang Ren, Ji-Rong Wen},
+    year={2022},
+    journal={arXiv preprint arXiv:2211.14876}
 }
 ```
 
