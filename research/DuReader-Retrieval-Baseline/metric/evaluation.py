@@ -4,6 +4,7 @@ Command line:
 python msmarco_eval_ranking.py <path_to_reference_file> <path_to_candidate_file>
 Creation Date : 06/12/2018
 Last Modified : 1/21/2019
+                12/19/2023 update for MRR metric 
 Authors : Daniel Campos <dacamp@microsoft.com>, Rutger van Haasteren <ruvanh@microsoft.com>
 """
 import sys
@@ -132,7 +133,7 @@ def compute_metrics(qids_to_relevant_passageids, qids_to_ranked_candidate_passag
     if len(ranking) == 0:
         raise IOError("No matching QIDs found. Are you sure you are scoring the evaluation set?")
 
-    MRR = MRR / len(qids_to_relevant_passageids)
+    MRR = MRR / len(qids_to_ranked_candidate_passages)
     recall_top1 = len(recall_q_top1) * 1.0 / len(qids_to_relevant_passageids)
     recall_top50 = len(recall_q_top50) * 1.0 / len(qids_to_relevant_passageids)
     recall_all = len(recall_q_all) * 1.0 / len(qids_to_relevant_passageids)
